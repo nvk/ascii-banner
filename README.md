@@ -286,6 +286,10 @@ Useful for conditionally disabling banners in scripts or CI.
 | `ascii-banner list --preview` | List fonts with a rendered preview |
 | `ascii-banner tags` | Show all tags, sizes, border styles, and comment formats |
 
+## History
+
+Curious about the origins of ASCII art? Check out [asciihistory.com](https://asciihistory.com).
+
 ## License
 
 MIT + Commons Clause -- Copyright (c) 2026 nvk
