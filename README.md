@@ -1,14 +1,10 @@
 # ascii-banner
 
-```
-                _  _        _
-  __ _ ___  ___(_)(_)      | |__   __ _ _ __  _ __   ___ _ __
- / _` / __|/ __| || |_____ | '_ \ / _` | '_ \| '_ \ / _ \ '__|
-| (_| \__ \ (__| || |_____|| |_) | (_| | | | | | | |  __/ |
- \__,_|___/\___|_||_|      |_.__/ \__,_|_| |_|_| |_|\___|_|
-```
+![ascii-banner hero](screenshots/hero.png)
 
 Convert text to ASCII art banners using FIGlet fonts. 328 built-in fonts, color output, borders, comment formatting, and fuzzy font search -- all with zero dependencies.
+
+**Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
 
 ## Install
 
@@ -34,6 +30,8 @@ echo "Hello" | ascii-banner -f Big
 ascii-banner -f Slant -c red --border rounded "Deploy"
 ```
 
+![fonts and colors](screenshots/fonts-showcase.png)
+
 ## Fonts
 
 328 bundled FIGlet fonts, each tagged with categories and rated for size (xs/sm/md/lg/xl) and legibility (1-5).
@@ -58,6 +56,8 @@ ascii-banner tags
 ```
 
 ### Preview fonts with your text
+
+![tag browsing](screenshots/tags.png)
 
 ```bash
 # Show text in all fonts
@@ -113,6 +113,8 @@ ascii-banner -t classic --sort legibility "Test"
 
 Apply color to output with `-c` / `--color`. Requires a terminal that supports ANSI escape codes.
 
+![rainbow colors](screenshots/rainbow.png)
+
 ```bash
 # Named colors: black, red, green, yellow, blue, magenta, cyan, white
 ascii-banner -c green "OK"
@@ -136,6 +138,8 @@ ascii-banner -c gradient:rainbow "Spectrum"
 ## Borders
 
 Wrap output in a box with `--border`. Five styles available:
+
+![border example](screenshots/border-gradient.png)
 
 ```bash
 # Single line
@@ -176,6 +180,8 @@ ascii-banner --border ascii "Hi"
 ## Comment Formatting
 
 Wrap output as a source code comment with `--comment`. Useful for embedding banners in code.
+
+![comment formatting](screenshots/comment.png)
 
 ```bash
 # Python / Bash / Ruby / Perl
