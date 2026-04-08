@@ -56,13 +56,13 @@ def main() -> None:
 
     # 2. Fonts showcase
     out1 = run("-f", "Doom", "Hello World")
-    out2 = run("-f", "Big", "Crypto")
+    out2 = run("-f", "Banner3", "-c", "#ff9900", "BITCOIN")
     console = Console(file=None, record=True, width=80, force_terminal=True)
     console.print(Text("$ ", style="green") + Text('ascii-banner -f Doom "Hello World"', style="white"))
     console.print()
     console.print(Text.from_ansi(out1))
     console.print()
-    console.print(Text("$ ", style="green") + Text('ascii-banner -f Big "Crypto"', style="white"))
+    console.print(Text("$ ", style="green") + Text('ascii-banner -f Banner3 -c "#ff9900" "BITCOIN"', style="white"))
     console.print()
     console.print(Text.from_ansi(out2))
     (DIR / "fonts-showcase.svg").write_text(console.export_svg(title="ascii-banner", theme=THEME))
