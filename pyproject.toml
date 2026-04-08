@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ascii-banner"
+version = "0.2.0"
+description = "Convert text to ASCII art banners using FIGlet fonts"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "nvk"}]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+ascii-banner = "ascii_banner.cli:main"
+
+[tool.setuptools.package-data]
+ascii_banner = ["fonts/*.flf"]
