@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT AND Commons-Clause-1.0
+# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 nvk
 """CLI entry point for ascii-banner."""
 

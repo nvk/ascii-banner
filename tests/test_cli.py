@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT AND Commons-Clause-1.0
+# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 nvk
 """Tests for ascii_banner.cli — CLI subprocess tests."""
 

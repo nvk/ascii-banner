@@ -292,6 +292,6 @@ Curious about the origins of ASCII art? Check out [asciihistory.com](https://asc
 
 ## License
 
-MIT + Commons Clause -- Copyright (c) 2026 nvk
+MIT -- Copyright (c) 2026 nvk
 
 Bundled FIGlet font files (`.flf`) retain their original licenses as specified in each font's comment header.
