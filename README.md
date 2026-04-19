@@ -4,14 +4,16 @@
 
 Convert text to ASCII art banners using FIGlet fonts. 328 built-in fonts, color output, borders, comment formatting, and fuzzy font search -- all with zero dependencies.
 
-**Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
+**Website**: [ascii-banner.com](https://ascii-banner.com) | **Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
 
 ## Install
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
+# Homebrew (macOS/Linux)
+brew install nvk/tap/ascii-banner
+
+# pip
+pip install ascii-banner
 ```
 
 ## Quick Start
