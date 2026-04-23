@@ -168,6 +168,7 @@ def _render_multiple(
         if tags:
             info += f"  [{', '.join(tags)}]"
         print(f"── {name}  ({info}) ──")
+        print()
         output = _apply_postprocess(output, args)
         print(output)
         print()
