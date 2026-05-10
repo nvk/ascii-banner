@@ -4,7 +4,7 @@
 
 Convert text to ASCII art banners using FIGlet fonts. 328 built-in fonts, color output, borders, comment formatting, and fuzzy font search -- all with zero dependencies.
 
-**Website**: [ascii-banner.com](https://ascii-banner.com) | **Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
+**Website**: [ascii-banner.com](https://ascii-banner.com) | **Examples**: [animation gallery](https://ascii-banner.com/examples/) | **Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
 
 ## Install
 
@@ -289,6 +289,9 @@ ascii-banner --animate unfurl --export deploy.gif "Deploy"
 ascii-banner --animate matrix --seed 7 --duration 3 --export banner.mp4 "Launch"
 ascii-banner --animate reveal --export banner.mp4 --export banner.webm "Launch"
 ```
+
+See the full animation gallery with exact generation flags in
+[examples/](examples/).
 
 Effects: `reveal`, `unfurl`, `matrix`, `print`, `random`, `decrypt`,
 `wipe`, `middleout`, `slice`, `slide`, `scan`, `colorshift`, `glitch`,
