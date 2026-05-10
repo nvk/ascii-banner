@@ -83,6 +83,16 @@ def test_wipe_direction_right_starts_from_right_edge() -> None:
     assert frames[1].canvas.to_text().rstrip().endswith("D")
 
 
+def test_laser_scans_one_row_at_a_time() -> None:
+    final = Canvas.from_text("ABC\nDEF", fg=(255, 128, 0))
+    frames = build_animation(final, AnimationOptions("laser", fps=6, duration=1))
+
+    assert frames[0].canvas.to_lines() == ["|  ", "   "]
+    assert frames[3].canvas.to_lines() == ["|BC", "|  "]
+    assert frames[4].canvas.to_lines() == ["A|C", "D| "]
+    assert frames[-1].canvas == final
+
+
 def test_unknown_effect_raises() -> None:
     final = Canvas.from_text("X")
 

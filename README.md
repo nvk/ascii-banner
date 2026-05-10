@@ -285,9 +285,9 @@ ascii-banner --animate reveal "Deploy"
 ascii-banner -f "ANSI Shadow" -c gradient:green:cyan --animate matrix "LLM WIKI"
 
 # Export animated assets
-ascii-banner --animate unfurl --export deploy.gif "Deploy"
-ascii-banner --animate matrix --seed 7 --duration 3 --export banner.mp4 "Launch"
-ascii-banner --animate reveal --export banner.mp4 --export banner.webm "Launch"
+ascii-banner --animate unfurl --loop 0 --export deploy.gif "Deploy"
+ascii-banner --animate matrix --seed 7 --duration 3 --loop 0 --export banner.mp4 "Launch"
+ascii-banner --animate reveal --loop 0 --export banner.mp4 --export banner.webm "Launch"
 ```
 
 See the comprehensive guide and full animation gallery with exact

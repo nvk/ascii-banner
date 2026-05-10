@@ -556,14 +556,62 @@ def _fireworks(final_canvas: Canvas, count: int, options: AnimationOptions) -> l
 
 def _laser(final_canvas: Canvas, count: int, options: AnimationOptions) -> list[Canvas]:
     accent = _accent_color(final_canvas)
-    order = _visible_positions(final_canvas)
+    rows = [
+        (y, min(x for x, _y in positions), max(x for x, _y in positions))
+        for y in range(final_canvas.height)
+        if (positions := _visible_positions_in_row(final_canvas, y))
+    ]
+    if not rows:
+        return [_blank_like(final_canvas) for _ in range(count)]
+    if options.direction == "up":
+        rows = list(reversed(rows))
+
+    spans = [max_x - min_x + 1 for _y, min_x, max_x in rows]
+    total = sum(spans)
+    trail = max(1, round(1 + options.intensity * 4))
     frames: list[Canvas] = []
     for index in range(count):
         p = _progress(index, count)
-        grid = [list(row) for row in _copy_positions(final_canvas, set(order[: int(len(order) * p)])).cells]
-        beam_x = min(final_canvas.width - 1, round(final_canvas.width * p))
-        for y in range(final_canvas.height):
-            _set_cell(grid, beam_x, y, Cell("|", fg=_highlight_color(accent)), overwrite=True)
+        slot = min(total - 1, int(total * p))
+        grid = _blank_grid(final_canvas)
+        completed_rows: set[int] = set()
+        current_y, start_x, end_x = rows[-1]
+        offset = 0
+        for row_index, (y, min_x, max_x) in enumerate(rows):
+            span = spans[row_index]
+            if slot >= offset + span:
+                completed_rows.add(y)
+                offset += span
+                continue
+            current_y, start_x, end_x = y, min_x, max_x
+            break
+
+        for y in completed_rows:
+            for x, cell in enumerate(final_canvas.cells[y]):
+                if cell.char != " ":
+                    _set_cell(grid, x, y, cell, overwrite=True)
+
+        scan_offset = slot - sum(spans[i] for i, (y, _min_x, _max_x) in enumerate(rows) if y in completed_rows)
+        if options.direction == "right":
+            beam_x = end_x - scan_offset
+            revealed_range = range(beam_x, end_x + 1)
+            trail_range = range(beam_x, min(end_x + 1, beam_x + trail + 1))
+        else:
+            beam_x = start_x + scan_offset
+            revealed_range = range(start_x, beam_x + 1)
+            trail_range = range(max(start_x, beam_x - trail), beam_x + 1)
+
+        for x in revealed_range:
+            cell = final_canvas.cells[current_y][x]
+            if cell.char == " ":
+                continue
+            out = _highlight(cell, accent) if x in trail_range else cell
+            _set_cell(grid, x, current_y, out, overwrite=True)
+
+        beam = Cell("|", fg=_highlight_color(accent))
+        if 0 <= beam_x < final_canvas.width:
+            for y in range(0, current_y + 1):
+                _set_cell(grid, beam_x, y, beam, overwrite=True)
         frames.append(_canvas_from_grid(grid))
     return frames
 
