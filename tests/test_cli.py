@@ -74,7 +74,7 @@ class TestCliList:
     def test_list_by_tag(self) -> None:
         result = run_banner("list", "classic")
         assert result.returncode == 0
-        assert "Standard" in result.stdout
+        assert "standard" in result.stdout
 
     def test_list_by_size(self) -> None:
         result = run_banner("list", "xs")
@@ -131,6 +131,12 @@ class TestCliOptions:
         result = run_banner("-j", "center", "-w", "120", "A")
         assert result.returncode == 0
 
+    def test_svg_stdout_dash(self) -> None:
+        result = run_banner("-f", "ANSI Shadow", "--svg", "-", "LLM")
+        assert result.returncode == 0
+        assert result.stdout.startswith("<?xml")
+        assert "<svg " in result.stdout
+
 
 # ---------------------------------------------------------------------------
 # Edge cases
@@ -158,3 +164,8 @@ class TestCliEdgeCases:
         )
         assert result.returncode == 0
         assert result.stdout == ""
+
+    def test_multifont_preserves_stdin_newlines(self) -> None:
+        result = run_banner("-t", "shadow", "-s", "sm", input_text="A\nB")
+        assert result.returncode == 0
+        assert "?" not in result.stdout

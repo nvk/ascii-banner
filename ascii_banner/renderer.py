@@ -41,7 +41,7 @@ def render(font: Font, text: str, width: int = 0, justify: str = "left") -> str:
     # Trim trailing spaces
     max_width = 0
     for i, line in enumerate(output):
-        output[i] = line.rstrip()
+        output[i] = line.rstrip(" ").replace(font.hardblank, " ").rstrip(" ")
         if len(output[i]) > max_width:
             max_width = len(output[i])
 

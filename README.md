@@ -258,8 +258,8 @@ or any time you want a resolution-independent version of the banner.
 # Write SVG to file
 ascii-banner -f "ANSI Shadow" --svg out.svg "LLM WIKI"
 
-# Write SVG to stdout (pass --svg with no value)
-ascii-banner -f "ANSI Shadow" --svg "LLM WIKI" > out.svg
+# Write SVG to stdout
+ascii-banner -f "ANSI Shadow" --svg - "LLM WIKI" > out.svg
 ```
 
 `--svg-mode` controls how the █ block aligns with the shadow band:

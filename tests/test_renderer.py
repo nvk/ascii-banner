@@ -52,6 +52,11 @@ class TestRenderBasic:
         lines = result.split("\n")
         assert len(lines) == standard_font.height
 
+    def test_hardblank_space_preserved_between_words(self, standard_font) -> None:
+        without_space = render(standard_font, "AB").split("\n")[0]
+        with_space = render(standard_font, "A B").split("\n")[0]
+        assert len(with_space) - len(without_space) >= 2
+
 
 # ---------------------------------------------------------------------------
 # Justification

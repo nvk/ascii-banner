@@ -97,7 +97,12 @@ class TestLoad:
 
     def test_load_big(self) -> None:
         font = load("Big")
-        assert font.name == "Big"
+        assert font.name == "big"
+        assert font.height > 0
+
+    def test_load_is_case_insensitive(self) -> None:
+        font = load("Standard")
+        assert font.name == "standard"
         assert font.height > 0
 
     def test_load_nonexistent_raises(self) -> None:

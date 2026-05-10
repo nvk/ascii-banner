@@ -113,10 +113,28 @@ def parse(text: str) -> Font:
 def load(name: str) -> Font:
     """Load a built-in font by name."""
     font_dir = resources.files("ascii_banner") / "fonts"
-    font_file = font_dir / f"{name}.flf"
+    name_lower = name.lower()
+    font_file = None
+    actual_name = ""
+
+    for item in font_dir.iterdir():
+        if not item.name.endswith(".flf"):
+            continue
+        stem = item.name.removesuffix(".flf")
+        if stem == name:
+            font_file = item
+            actual_name = stem
+            break
+        if stem.lower() == name_lower and font_file is None:
+            font_file = item
+            actual_name = stem
+
+    if font_file is None:
+        raise FileNotFoundError(f"No built-in font named {name!r}")
+
     text = font_file.read_text(encoding="utf-8", errors="replace")
     f = parse(text)
-    f.name = name
+    f.name = actual_name
     return f
 
 
@@ -180,7 +198,6 @@ def _read_character(
         raw = lines[idx]
         idx += 1
         stripped = _strip_endmark(raw)
-        stripped = stripped.replace(hardblank, " ")
         char_lines.append(stripped)
         if len(stripped) > max_width:
             max_width = len(stripped)

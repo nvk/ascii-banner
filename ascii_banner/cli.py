@@ -197,7 +197,7 @@ def _render_multiple(
     for name in font_names:
         try:
             font = parser.load(name)
-            output = renderer.render(font, text, width=width, justify=args.justify)
+            output = _render_text(font, text, width, args.justify)
         except Exception:
             continue
         tags = get_tags(name)
@@ -336,7 +336,7 @@ def parse_args() -> argparse.Namespace:
 
     ap.add_argument("--svg", nargs="?", const="-", default=None, metavar="PATH",
                     help="emit vector SVG instead of terminal output "
-                         "(no value = stdout)")
+                         "(no value or '-' = stdout)")
     ap.add_argument("--svg-mode", choices=["default", "inset", "extend"],
                     default="extend",
                     help="SVG block rendering mode (default: extend)")

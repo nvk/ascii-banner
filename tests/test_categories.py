@@ -15,6 +15,7 @@ from ascii_banner.categories import (
     fonts_by_size,
     sort_fonts,
 )
+from ascii_banner.parser import list_fonts
 
 
 # ---------------------------------------------------------------------------
@@ -48,6 +49,14 @@ class TestGetTags:
             for tag in tags:
                 assert tag in CATEGORIES, f"Font '{font_name}' has unknown tag '{tag}'"
 
+    def test_all_tagged_fonts_exist(self) -> None:
+        font_names = set(list_fonts())
+        assert sorted(set(FONT_TAGS) - font_names) == []
+
+    def test_all_fonts_have_tags(self) -> None:
+        font_names = set(list_fonts())
+        assert sorted(font_names - set(FONT_TAGS)) == []
+
 
 # ---------------------------------------------------------------------------
 # get_metrics
@@ -75,6 +84,14 @@ class TestGetMetrics:
         for name, m in FONT_METRICS.items():
             assert m["size"] in SIZES, f"Font '{name}' has invalid size '{m['size']}'"
 
+    def test_all_metric_fonts_exist(self) -> None:
+        font_names = set(list_fonts())
+        assert sorted(set(FONT_METRICS) - font_names) == []
+
+    def test_all_fonts_have_metrics(self) -> None:
+        font_names = set(list_fonts())
+        assert sorted(font_names - set(FONT_METRICS)) == []
+
 
 # ---------------------------------------------------------------------------
 # fonts_by_tag
@@ -85,7 +102,7 @@ class TestFontsByTag:
         fonts = fonts_by_tag("classic")
         assert isinstance(fonts, list)
         assert len(fonts) > 0
-        assert "Standard" in fonts
+        assert "standard" in fonts
 
     def test_block(self) -> None:
         fonts = fonts_by_tag("block")
