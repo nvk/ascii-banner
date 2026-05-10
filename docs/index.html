@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ascii-banner docs and examples</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b0d;
+      --surface: #10161a;
+      --surface-2: #151d22;
+      --line: #2a3741;
+      --text: #edf5f1;
+      --muted: #a7b7b0;
+      --green: #00ff66;
+      --orange: #ff8000;
+      --link: #80e6cf;
+      --code: #050708;
+      --warn: #ffc46b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    a {
+      color: var(--link);
+    }
+
+    code,
+    pre,
+    kbd {
+      color: #d8efe8;
+      background: var(--code);
+      border-radius: 5px;
+    }
+
+    code,
+    kbd {
+      padding: 2px 5px;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 12px;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.45;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+
+    main {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 28px 18px 52px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 38px 0 14px;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-top: 18px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .lede,
+    .note,
+    .muted {
+      color: var(--muted);
+    }
+
+    .lede {
+      max-width: 930px;
+      font-size: 16px;
+    }
+
+    .top-links,
+    .toc,
+    .summary,
+    .cards,
+    .flag-grid,
+    .recipe-grid,
+    .gallery-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .top-links {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .top-links a,
+    .toc a {
+      display: block;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 11px 12px;
+      text-decoration: none;
+    }
+
+    .toc {
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      margin-top: 12px;
+    }
+
+    .summary {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin: 18px 0 10px;
+    }
+
+    .summary div,
+    .card,
+    .flag,
+    .recipe,
+    .callout {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .summary span,
+    .flag span,
+    .recipe span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .cards,
+    .flag-grid,
+    .recipe-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-top: 12px;
+    }
+
+    .card p,
+    .flag p,
+    .recipe p,
+    .callout p,
+    td {
+      color: var(--muted);
+    }
+
+    .callout {
+      margin-top: 12px;
+      border-color: rgba(255, 196, 107, 0.55);
+    }
+
+    .callout strong {
+      color: var(--warn);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 12px;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      color: var(--text);
+      background: #121a1f;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      margin-top: 14px;
+    }
+
+    figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 92px;
+      background: #000;
+      image-rendering: pixelated;
+    }
+
+    figcaption {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .title-row h3 {
+      margin-top: 0;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .chip.green {
+      border-color: rgba(0, 255, 102, 0.5);
+      color: var(--green);
+    }
+
+    .chip.orange {
+      border-color: rgba(255, 128, 0, 0.55);
+      color: var(--orange);
+    }
+
+    .command {
+      font-size: 12px;
+    }
+
+    .anchor {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding-inline: 12px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <h1>ascii-banner docs and examples</h1>
+      <p class="lede">A practical guide to rendering text as FIGlet banners, choosing fonts, adding color and borders, formatting comments, exporting SVG, playing terminal animations, and producing GIF, WebP, MP4, and WebM assets for the web.</p>
+      <nav class="top-links" aria-label="Project links">
+        <a href="/">Website home</a>
+        <a href="https://github.com/nvk/ascii-banner">GitHub repository</a>
+        <a href="#animation-gallery">Animation gallery</a>
+        <a href="#flag-reference">Flag reference</a>
+      </nav>
+    </header>
+
+    <section aria-labelledby="animation-gallery">
+      <h2 id="animation-gallery">Animation Gallery <a class="anchor" href="#animation-gallery">#</a></h2>
+      <p class="muted">Every supported animation effect is rendered twice: LLM-WIKI in green and Bitcoin in orange. Each card shows the exact command used to produce the GIF.</p>
+      <div class="summary">
+        <div><span>Effects</span>30 supported animations</div>
+        <div><span>Text</span>LLM-WIKI and Bitcoin</div>
+        <div><span>Format</span>GIF for broad README and browser support</div>
+        <div><span>Determinism</span>Seeded with <code>--seed 21</code></div>
+      </div>
+      <div class="flag-grid">
+        <div class="flag"><span>Font</span><p><code>-f Slant</code> uses the Slant FIGlet font.</p></div>
+        <div class="flag"><span>Timing</span><p><code>--duration 1.6 --fps 8</code> keeps each preview short and small.</p></div>
+        <div class="flag"><span>Seed</span><p><code>--seed 21</code> makes randomized effects reproducible.</p></div>
+        <div class="flag"><span>Intensity</span><p><code>--intensity 0.35</code> uses moderate effect strength where supported.</p></div>
+        <div class="flag"><span>Raster size</span><p><code>--cell-width 7 --cell-height 14</code> controls the exported character cell.</p></div>
+        <div class="flag"><span>Background</span><p><code>--bg black</code> renders against a black media background.</p></div>
+      </div>
+
+      <h3>LLM-WIKI in green</h3>
+      <div class="gallery-grid" id="green-grid"></div>
+
+      <h3>Bitcoin in orange</h3>
+      <div class="gallery-grid" id="orange-grid"></div>
+
+      <h3>Other export formats</h3>
+      <pre><code>ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.gif "LLM-WIKI"
+ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.webp "LLM-WIKI"
+ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.mp4 "LLM-WIKI"
+ascii-banner -f Slant -c green --animate reveal --export reveal.mp4 --export reveal.webm "LLM-WIKI"</code></pre>
+    </section>
+
+    <section aria-labelledby="contents">
+      <h2 id="contents">Guide Contents <a class="anchor" href="#contents">#</a></h2>
+      <nav class="toc" aria-label="Documentation sections">
+        <a href="#install">Install</a>
+        <a href="#mental-model">Mental model</a>
+        <a href="#quick-start">Quick start</a>
+        <a href="#input">Input modes</a>
+        <a href="#fonts">Fonts</a>
+        <a href="#color">Color</a>
+        <a href="#layout">Layout</a>
+        <a href="#borders">Borders</a>
+        <a href="#comments">Comment formatting</a>
+        <a href="#svg">SVG output</a>
+        <a href="#animations">Animations</a>
+        <a href="#media-export">Media export</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#flag-reference">Flag reference</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+      </nav>
+    </section>
+
+    <section aria-labelledby="install">
+      <h2 id="install">Install <a class="anchor" href="#install">#</a></h2>
+      <div class="summary">
+        <div><span>Package</span>ascii-banner</div>
+        <div><span>Runtime</span>Python command line tool</div>
+        <div><span>Fonts</span>328 bundled FIGlet fonts</div>
+        <div><span>Core deps</span>Zero required dependencies</div>
+      </div>
+      <pre><code># Homebrew
+brew install nvk/tap/ascii-banner
+
+# pip
+pip install ascii-banner
+
+# Optional media export support for GIF and WebP
+pip install "ascii-banner[media]"
+
+# MP4 and WebM also require ffmpeg
+brew install ffmpeg</code></pre>
+    </section>
+
+    <section aria-labelledby="mental-model">
+      <h2 id="mental-model">Mental Model <a class="anchor" href="#mental-model">#</a></h2>
+      <div class="cards">
+        <div class="card"><h3>1. Choose text</h3><p>Pass text as arguments or pipe stdin into the command. Multiple positional words are joined with spaces.</p></div>
+        <div class="card"><h3>2. Choose a font</h3><p>Use the default <code>standard</code> font, a bundled font with <code>-f</code>, a custom <code>.flf</code> file with <code>-F</code>, or browse categories.</p></div>
+        <div class="card"><h3>3. Style output</h3><p>Add color, justification, width, borders, comment wrappers, SVG rendering, animation, or media export.</p></div>
+        <div class="card"><h3>4. Send it somewhere</h3><p>Print to the terminal, redirect to a file, embed in source, save SVG, or export animated web media.</p></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-start">
+      <h2 id="quick-start">Quick Start <a class="anchor" href="#quick-start">#</a></h2>
+      <pre><code># Default font
+ascii-banner "Hello"
+
+# Pick a font
+ascii-banner -f Doom "Hello"
+
+# Pipe input
+echo "Hello" | ascii-banner -f Big
+
+# Color and border
+ascii-banner -f Slant -c red --border rounded "Deploy"
+
+# Center inside an 80-column output
+ascii-banner -f Big -w 80 -j center "Ship"
+
+# Save to a text file
+ascii-banner -f Standard "Release" > banner.txt</code></pre>
+    </section>
+
+    <section aria-labelledby="input">
+      <h2 id="input">Input Modes <a class="anchor" href="#input">#</a></h2>
+      <div class="cards">
+        <div class="card"><h3>Positional text</h3><pre><code>ascii-banner "LLM WIKI"</code></pre></div>
+        <div class="card"><h3>Multiple words</h3><pre><code>ascii-banner LLM WIKI</code></pre></div>
+        <div class="card"><h3>Pipe stdin</h3><pre><code>printf "LLM WIKI" | ascii-banner</code></pre></div>
+        <div class="card"><h3>Script silence</h3><pre><code>ascii-banner -q "hidden"
+NO_BANNER=1 ascii-banner "hidden"</code></pre></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="fonts">
+      <h2 id="fonts">Fonts <a class="anchor" href="#fonts">#</a></h2>
+      <p class="muted">Fonts are bundled FIGlet <code>.flf</code> files. The font picker supports fuzzy matching, so small typos usually resolve to a nearby font.</p>
+      <pre><code># List all fonts
+ascii-banner list
+
+# List fonts in a category or size bucket
+ascii-banner list block
+ascii-banner list sm
+
+# Preview every font in its own style
+ascii-banner list --preview
+
+# Render your text in all fonts
+ascii-banner --all "Test"
+
+# Render a category or size subset
+ascii-banner -t gothic "Test"
+ascii-banner -s xl "Test"
+
+# Combine filters and sort by readability
+ascii-banner -t block -s md --sort legibility "Test"
+
+# Load a font file outside the bundled set
+ascii-banner -F ./my-font.flf "Custom"</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tag</th><th>Use it when you want</th></tr></thead>
+          <tbody>
+            <tr><td><code>3d</code></td><td>Depth, perspective, and dimensional effects.</td></tr>
+            <tr><td><code>block</code></td><td>Heavy shapes, dense characters, and strong terminal presence.</td></tr>
+            <tr><td><code>bubble</code></td><td>Rounded and playful letterforms.</td></tr>
+            <tr><td><code>classic</code></td><td>Traditional FIGlet output with broad readability.</td></tr>
+            <tr><td><code>cursive</code></td><td>Script and handwriting styles.</td></tr>
+            <tr><td><code>decorative</code></td><td>Ornamental or elaborate banners.</td></tr>
+            <tr><td><code>digital</code></td><td>LED, LCD, dot matrix, and pixel styles.</td></tr>
+            <tr><td><code>gothic</code></td><td>Blackletter and medieval looks.</td></tr>
+            <tr><td><code>graffiti</code></td><td>Street-art inspired styles.</td></tr>
+            <tr><td><code>lean</code></td><td>Thin, lightweight output.</td></tr>
+            <tr><td><code>mini</code></td><td>Compact banners for small terminals and comments.</td></tr>
+            <tr><td><code>mono</code></td><td>Fixed-width terminal-friendly letterforms.</td></tr>
+            <tr><td><code>sans</code></td><td>Cleaner sans-serif styles.</td></tr>
+            <tr><td><code>serif</code></td><td>Serif styles.</td></tr>
+            <tr><td><code>shadow</code></td><td>Drop-shadow and depth effects.</td></tr>
+            <tr><td><code>slant</code></td><td>Italic or oblique banners.</td></tr>
+            <tr><td><code>tech</code></td><td>Futuristic, sci-fi, and cyber styles.</td></tr>
+            <tr><td><code>weird</code></td><td>Experimental output where style matters more than readability.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Size</th><th>Height</th><th>Good for</th></tr></thead>
+          <tbody>
+            <tr><td><code>xs</code></td><td>1-3 lines</td><td>Compact logs, shell prompts, narrow terminals.</td></tr>
+            <tr><td><code>sm</code></td><td>4-5 lines</td><td>Readable banners without much vertical space.</td></tr>
+            <tr><td><code>md</code></td><td>6-8 lines</td><td>Default documentation and terminal headers.</td></tr>
+            <tr><td><code>lg</code></td><td>9-12 lines</td><td>Hero banners and big terminal moments.</td></tr>
+            <tr><td><code>xl</code></td><td>13+ lines</td><td>Posters, screenshots, and very large outputs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="color">
+      <h2 id="color">Color <a class="anchor" href="#color">#</a></h2>
+      <p class="muted">Color uses ANSI escape codes for terminal output. Media export resolves the same color choices into pixels.</p>
+      <pre><code># Named colors
+ascii-banner -c green "OK"
+ascii-banner -c orange "Bitcoin"
+
+# Hex colors
+ascii-banner -c "#ff6600" "Fire"
+
+# Rainbow per character
+ascii-banner -c rainbow "Party"
+
+# Two-color gradient
+ascii-banner -c gradient:red:blue "Fade"
+ascii-banner -c gradient:#ff0000:#00ff00 "Xmas"
+
+# Smooth full-spectrum gradient
+ascii-banner -c gradient:rainbow "Spectrum"</code></pre>
+      <div class="callout"><p><strong>Terminal note:</strong> redirecting ANSI-colored output to a file preserves escape codes. Use SVG or media export if you need a clean visual asset instead of terminal text.</p></div>
+    </section>
+
+    <section aria-labelledby="layout">
+      <h2 id="layout">Layout <a class="anchor" href="#layout">#</a></h2>
+      <div class="cards">
+        <div class="card"><h3>Width</h3><p><code>-w</code> controls the maximum output width. Use it when centering, right-aligning, or constraining large fonts.</p><pre><code>ascii-banner -w 100 "Wide"</code></pre></div>
+        <div class="card"><h3>Justify</h3><p><code>-j left</code>, <code>-j center</code>, and <code>-j right</code> align the rendered banner within the chosen width.</p><pre><code>ascii-banner -w 80 -j center "Center"</code></pre></div>
+        <div class="card"><h3>Font fit</h3><p>If a font is too wide for the terminal, choose a smaller size bucket, shorter text, or a narrower font.</p><pre><code>ascii-banner -s sm "Compact"</code></pre></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="borders">
+      <h2 id="borders">Borders <a class="anchor" href="#borders">#</a></h2>
+      <p class="muted">Borders wrap the final rendered banner. They combine with fonts, color, width, justification, and comments.</p>
+      <pre><code>ascii-banner --border single "Hi"
+ascii-banner --border double "Hi"
+ascii-banner --border rounded "Hi"
+ascii-banner --border heavy "Hi"
+ascii-banner --border ascii "Hi"
+
+# Styled border example
+ascii-banner -f Slant -c cyan --border rounded "Deploy"</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Style</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>single</code></td><td>Clean terminal box drawing.</td></tr>
+            <tr><td><code>double</code></td><td>Heavier framed output.</td></tr>
+            <tr><td><code>rounded</code></td><td>Softer terminal framing.</td></tr>
+            <tr><td><code>heavy</code></td><td>High-emphasis headers.</td></tr>
+            <tr><td><code>ascii</code></td><td>Portable output for limited terminals or plain files.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="comments">
+      <h2 id="comments">Comment Formatting <a class="anchor" href="#comments">#</a></h2>
+      <p class="muted">Use <code>--comment</code> to paste banners into source files without manually prefixing each line.</p>
+      <pre><code># Hash comments
+ascii-banner --comment python "api"
+ascii-banner --comment bash "deploy"
+
+# Slash comments
+ascii-banner --comment js "api"
+ascii-banner --comment rust "core"
+
+# Block comments
+ascii-banner --comment c "api"
+ascii-banner --comment css "theme"
+
+# Markup comments
+ascii-banner --comment html "banner"
+ascii-banner --comment xml "banner"
+
+# SQL-style comments
+ascii-banner --comment sql "schema"</code></pre>
+      <p class="muted">Supported names include <code>bash</code>, <code>c</code>, <code>cpp</code>, <code>css</code>, <code>go</code>, <code>haskell</code>, <code>hs</code>, <code>html</code>, <code>java</code>, <code>javascript</code>, <code>js</code>, <code>lua</code>, <code>perl</code>, <code>python</code>, <code>ruby</code>, <code>rust</code>, <code>sh</code>, <code>shell</code>, <code>sql</code>, <code>ts</code>, <code>typescript</code>, and <code>xml</code>.</p>
+    </section>
+
+    <section aria-labelledby="svg">
+      <h2 id="svg">SVG Output <a class="anchor" href="#svg">#</a></h2>
+      <p class="muted">SVG output creates pure-vector files for supported block and double-line fonts. It is useful for web pages, stickers, plotters, and resolution-independent assets.</p>
+      <pre><code># Write SVG to a file
+ascii-banner -f "ANSI Shadow" --svg out.svg "LLM WIKI"
+
+# Write SVG to stdout
+ascii-banner -f "ANSI Shadow" --svg - "LLM WIKI" > out.svg
+
+# Pick the block rendering mode
+ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode extend "LLM WIKI"
+ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode default "LLM WIKI"
+ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode inset "LLM WIKI"
+
+# Tune double-line geometry and merge adjacent rectangles
+ascii-banner -f "ANSI Shadow" --svg out.svg --svg-stroke 15 --svg-gap 20 --svg-merge "LLM WIKI"</code></pre>
+      <div class="callout"><p><strong>Compatibility note:</strong> SVG export intentionally fails on unsupported glyphs so you know when a FIGlet font cannot be represented by the rectangle renderer.</p></div>
+    </section>
+
+    <section aria-labelledby="animations">
+      <h2 id="animations">Animations <a class="anchor" href="#animations">#</a></h2>
+      <p class="muted">Animations can play in an interactive terminal or be exported to media files. In non-interactive output without <code>--export</code>, the command prints the final static frame.</p>
+      <pre><code># Play in a terminal
+ascii-banner --animate reveal "Deploy"
+ascii-banner -f "ANSI Shadow" -c gradient:green:cyan --animate matrix "LLM WIKI"
+
+# Deterministic randomized animation
+ascii-banner --animate decrypt --charset hex --seed 7 "Secure"
+
+# Direction and reveal unit modifiers
+ascii-banner --animate wipe --direction right "Deploy"
+ascii-banner --animate print --by line "Release"
+
+# Color and palette modifiers
+ascii-banner --animate colorshift --palette rainbow "Party"
+ascii-banner --animate glitch --intensity 0.2 "Incident"</code></pre>
+      <h3>Compatibility rules</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rule</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td><code>--export</code> requires <code>--animate</code></td><td>Exports are built from animation frames.</td></tr>
+            <tr><td><code>--animate</code> cannot be combined with <code>--svg</code></td><td>SVG output is a static vector renderer; animation export uses raster frames.</td></tr>
+            <tr><td><code>--animate</code> and <code>--export</code> cannot be combined with <code>--all</code>, <code>--tag</code>, or <code>--size</code></td><td>Animation operates on one resolved banner at a time.</td></tr>
+            <tr><td>Default FPS is <code>12</code>, or <code>24</code> when exporting video</td><td>Terminal/GIF previews stay small, while video gets smoother motion by default.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Effect group</th><th>Effects</th><th>Useful modifiers</th></tr></thead>
+          <tbody>
+            <tr><td>Reveal</td><td><code>reveal</code>, <code>unfurl</code>, <code>print</code>, <code>random</code>, <code>wipe</code>, <code>middleout</code>, <code>slice</code>, <code>slide</code></td><td><code>--direction</code>, <code>--by</code>, <code>--axis</code>, <code>--seed</code></td></tr>
+            <tr><td>Terminal noise</td><td><code>matrix</code>, <code>decrypt</code>, <code>glitch</code>, <code>vhs</code>, <code>errorcorrect</code></td><td><code>--charset</code>, <code>--seed</code>, <code>--intensity</code></td></tr>
+            <tr><td>Color and light</td><td><code>scan</code>, <code>colorshift</code>, <code>sparkle</code>, <code>fireworks</code>, <code>laser</code>, <code>thunderstorm</code></td><td><code>--palette</code>, <code>--intensity</code>, <code>--seed</code></td></tr>
+            <tr><td>Motion and atmosphere</td><td><code>waves</code>, <code>rain</code>, <code>pour</code>, <code>burn</code>, <code>smoke</code>, <code>pipes</code>, <code>starfield</code>, <code>bubbles</code>, <code>swarm</code>, <code>blackhole</code>, <code>synthgrid</code></td><td><code>--axis</code>, <code>--palette</code>, <code>--intensity</code>, <code>--seed</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="media-export">
+      <h2 id="media-export">Media Export <a class="anchor" href="#media-export">#</a></h2>
+      <p class="muted">Use <code>--export</code> with <code>--animate</code>. The output extension chooses the encoder.</p>
+      <pre><code># GIF
+ascii-banner --animate unfurl --export deploy.gif "Deploy"
+
+# WebP
+ascii-banner --animate reveal --export deploy.webp "Deploy"
+
+# MP4 and WebM
+ascii-banner --animate matrix --seed 7 --duration 3 --export banner.mp4 "Launch"
+ascii-banner --animate matrix --seed 7 --duration 3 --export banner.webm "Launch"
+
+# Export several formats in one run
+ascii-banner --animate reveal --export banner.gif --export banner.mp4 --export banner.webm "Launch"
+
+# Control raster cell size and background
+ascii-banner -f Slant -c orange --animate scan --cell-width 8 --cell-height 16 --bg black --export bitcoin-scan.gif "Bitcoin"</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Format</th><th>Requires</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td><code>.gif</code></td><td><code>ascii-banner[media]</code></td><td>README files, issue comments, simple previews.</td></tr>
+            <tr><td><code>.webp</code></td><td><code>ascii-banner[media]</code></td><td>Modern web pages with smaller animated assets.</td></tr>
+            <tr><td><code>.mp4</code></td><td><code>ascii-banner[media]</code> and <code>ffmpeg</code></td><td>Broad browser video support with H.264.</td></tr>
+            <tr><td><code>.webm</code></td><td><code>ascii-banner[media]</code> and <code>ffmpeg</code></td><td>Open web video workflows.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="recipes">
+      <h2 id="recipes">Recipes <a class="anchor" href="#recipes">#</a></h2>
+      <div class="recipe-grid">
+        <div class="recipe"><span>Release header</span><pre><code>ascii-banner -f Slant -c green --border rounded "Release 1.2.0"</code></pre></div>
+        <div class="recipe"><span>CI logs</span><pre><code>ascii-banner -f Standard -c cyan "Tests"
+pytest</code></pre></div>
+        <div class="recipe"><span>Python file banner</span><pre><code>ascii-banner -f Small --comment python "api client" > banner.py</code></pre></div>
+        <div class="recipe"><span>README image</span><pre><code>ascii-banner -f "ANSI Shadow" --svg hero.svg --svg-merge "LLM WIKI"</code></pre></div>
+        <div class="recipe"><span>Animated social preview</span><pre><code>ascii-banner -f Slant -c orange --animate matrix --duration 3 --fps 15 --seed 21 --export bitcoin.gif "Bitcoin"</code></pre></div>
+        <div class="recipe"><span>Font discovery</span><pre><code>ascii-banner list --preview
+ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="flag-reference">
+      <h2 id="flag-reference">Flag Reference <a class="anchor" href="#flag-reference">#</a></h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Flag</th><th>Short</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>text</code></td><td></td><td>Text to render, or pipe stdin.</td></tr>
+            <tr><td><code>--font NAME</code></td><td><code>-f</code></td><td>Bundled font name with fuzzy matching.</td></tr>
+            <tr><td><code>--font-file PATH</code></td><td><code>-F</code></td><td>Load a custom FIGlet <code>.flf</code> font.</td></tr>
+            <tr><td><code>--all</code></td><td><code>-a</code></td><td>Render text in all available fonts.</td></tr>
+            <tr><td><code>--tag TAG</code></td><td><code>-t</code></td><td>Filter multi-font output by category tag.</td></tr>
+            <tr><td><code>--size SIZE</code></td><td><code>-s</code></td><td>Filter by <code>xs</code>, <code>sm</code>, <code>md</code>, <code>lg</code>, or <code>xl</code>.</td></tr>
+            <tr><td><code>--sort KEY</code></td><td></td><td>Sort multi-font output by <code>name</code>, <code>size</code>, or <code>legibility</code>.</td></tr>
+            <tr><td><code>--width N</code></td><td><code>-w</code></td><td>Maximum output width.</td></tr>
+            <tr><td><code>--color COLOR</code></td><td><code>-c</code></td><td>Named color, hex, rainbow, gradient pair, or rainbow gradient.</td></tr>
+            <tr><td><code>--justify ALIGN</code></td><td><code>-j</code></td><td><code>left</code>, <code>center</code>, or <code>right</code>.</td></tr>
+            <tr><td><code>--border STYLE</code></td><td></td><td><code>single</code>, <code>double</code>, <code>rounded</code>, <code>heavy</code>, or <code>ascii</code>.</td></tr>
+            <tr><td><code>--comment LANG</code></td><td></td><td>Wrap output as a language-specific source comment.</td></tr>
+            <tr><td><code>--quiet</code></td><td><code>-q</code></td><td>Suppress output.</td></tr>
+            <tr><td><code>--svg [PATH]</code></td><td></td><td>Emit vector SVG. No path or <code>-</code> writes to stdout.</td></tr>
+            <tr><td><code>--svg-mode MODE</code></td><td></td><td><code>default</code>, <code>inset</code>, or <code>extend</code>.</td></tr>
+            <tr><td><code>--svg-stroke N</code></td><td></td><td>Line thickness for double-line SVG glyphs.</td></tr>
+            <tr><td><code>--svg-gap N</code></td><td></td><td>Gap between parallel SVG double lines.</td></tr>
+            <tr><td><code>--svg-merge</code></td><td></td><td>Merge adjacent aligned rectangles to reduce SVG size.</td></tr>
+            <tr><td><code>--animate EFFECT</code></td><td></td><td>Play or export one animation effect.</td></tr>
+            <tr><td><code>--export PATH</code></td><td></td><td>Export animation to <code>.gif</code>, <code>.webp</code>, <code>.mp4</code>, or <code>.webm</code>. Repeatable.</td></tr>
+            <tr><td><code>--fps N</code></td><td></td><td>Animation frames per second.</td></tr>
+            <tr><td><code>--duration SECONDS</code></td><td></td><td>Animation length.</td></tr>
+            <tr><td><code>--loop N</code></td><td></td><td>Animation loop count. <code>0</code> means infinite where supported.</td></tr>
+            <tr><td><code>--seed N</code></td><td></td><td>Deterministic seed for randomized effects.</td></tr>
+            <tr><td><code>--direction DIR</code></td><td></td><td><code>left</code>, <code>right</code>, <code>up</code>, or <code>down</code>.</td></tr>
+            <tr><td><code>--by MODE</code></td><td></td><td><code>char</code>, <code>line</code>, <code>row</code>, or <code>column</code>.</td></tr>
+            <tr><td><code>--axis AXIS</code></td><td></td><td><code>horizontal</code>, <code>vertical</code>, <code>both</code>, <code>rows</code>, or <code>cols</code>.</td></tr>
+            <tr><td><code>--charset CHARS</code></td><td></td><td><code>ascii</code>, <code>binary</code>, <code>hex</code>, or literal characters.</td></tr>
+            <tr><td><code>--intensity N</code></td><td></td><td>Effect strength from <code>0</code> to <code>1</code>.</td></tr>
+            <tr><td><code>--palette NAME</code></td><td></td><td><code>accent</code>, <code>rainbow</code>, <code>fire</code>, or <code>ocean</code>.</td></tr>
+            <tr><td><code>--cell-width N</code></td><td></td><td>Media export character cell width in pixels.</td></tr>
+            <tr><td><code>--cell-height N</code></td><td></td><td>Media export character cell height in pixels.</td></tr>
+            <tr><td><code>--media-font PATH</code></td><td></td><td>Optional monospace TTF, OTF, or TTC font for media export.</td></tr>
+            <tr><td><code>--bg COLOR</code></td><td></td><td>Media export background color name or hex color.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Subcommands</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Command</th><th>Description</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><code>ascii-banner list</code></td><td>List bundled fonts with metadata.</td><td><code>ascii-banner list</code></td></tr>
+            <tr><td><code>ascii-banner list &lt;tag|size&gt;</code></td><td>List fonts filtered by category tag or size bucket.</td><td><code>ascii-banner list block</code><br><code>ascii-banner list sm</code></td></tr>
+            <tr><td><code>ascii-banner list --preview</code></td><td>List fonts and render each font name in its own style.</td><td><code>ascii-banner list --preview</code></td></tr>
+            <tr><td><code>ascii-banner tags</code></td><td>Show category tags, size buckets, border styles, and comment formats.</td><td><code>ascii-banner tags</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Environment</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variable</th><th>Behavior</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>NO_BANNER</code></td><td>Suppresses all output when set to any value except an empty string or <code>0</code>.</td><td><code>NO_BANNER=1 ascii-banner "hidden"</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="troubleshooting">
+      <h2 id="troubleshooting">Troubleshooting <a class="anchor" href="#troubleshooting">#</a></h2>
+      <div class="cards">
+        <div class="card"><h3>Font not found</h3><p>Use <code>ascii-banner list</code> or <code>ascii-banner list --preview</code>. Fuzzy matching helps, but exact names are safest for scripts.</p></div>
+        <div class="card"><h3>Colors look wrong</h3><p>Check terminal ANSI support. For files, prefer SVG or media export instead of redirecting ANSI-colored terminal text.</p></div>
+        <div class="card"><h3>GIF or WebP export fails</h3><p>Install Pillow with <code>pip install "ascii-banner[media]"</code>.</p></div>
+        <div class="card"><h3>MP4 or WebM export fails</h3><p>Install <code>ffmpeg</code> and make sure it is on <code>PATH</code>.</p></div>
+        <div class="card"><h3>SVG export rejects a font</h3><p>Use a supported block or double-line font such as <code>ANSI Shadow</code>, or use media export for arbitrary fonts.</p></div>
+        <div class="card"><h3>Animation differs between runs</h3><p>Set <code>--seed</code> for randomized effects such as matrix, decrypt, glitch, sparkle, and fireworks.</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const effects = [
+      "reveal",
+      "unfurl",
+      "matrix",
+      "print",
+      "random",
+      "decrypt",
+      "wipe",
+      "middleout",
+      "slice",
+      "slide",
+      "scan",
+      "colorshift",
+      "glitch",
+      "waves",
+      "vhs",
+      "rain",
+      "sparkle",
+      "fireworks",
+      "laser",
+      "errorcorrect",
+      "pour",
+      "burn",
+      "smoke",
+      "pipes",
+      "starfield",
+      "bubbles",
+      "swarm",
+      "blackhole",
+      "synthgrid",
+      "thunderstorm"
+    ];
+
+    const examples = [
+      {
+        grid: "green-grid",
+        slug: "llm-wiki",
+        text: "LLM-WIKI",
+        color: "green",
+        label: "LLM-WIKI in green"
+      },
+      {
+        grid: "orange-grid",
+        slug: "bitcoin",
+        text: "Bitcoin",
+        color: "orange",
+        label: "Bitcoin in orange"
+      }
+    ];
+
+    function commandFor(example, effect) {
+      const output = `docs/assets/${example.slug}-${effect}.gif`;
+      return `ascii-banner -f Slant -c ${example.color} --animate ${effect} --duration 1.6 --fps 8 --seed 21 --intensity 0.35 --cell-width 7 --cell-height 14 --bg black --export ${output} "${example.text}"`;
+    }
+
+    function cardFor(example, effect) {
+      const file = `${example.slug}-${effect}.gif`;
+      const figure = document.createElement("figure");
+      figure.innerHTML = `
+        <img src="assets/${file}" alt="${example.label} ${effect} animation" loading="lazy">
+        <figcaption>
+          <div class="title-row">
+            <h3>${effect}</h3>
+            <span class="chip ${example.color}">${example.color}</span>
+          </div>
+          <pre class="command"><code>${commandFor(example, effect)}</code></pre>
+        </figcaption>
+      `;
+      return figure;
+    }
+
+    for (const example of examples) {
+      const grid = document.getElementById(example.grid);
+      for (const effect of effects) {
+        grid.appendChild(cardFor(example, effect));
+      }
+    }
+  </script>
+</body>
+</html>
