@@ -886,6 +886,24 @@
       padding: 7px 8px;
     }
 
+    .site-footer {
+      margin-top: 26px;
+      padding: 14px 0 4px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .site-footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .site-footer a:hover,
+    .site-footer a:focus {
+      color: var(--text);
+      outline: none;
+    }
+
     @media (max-width: 980px) {
       .site-shell {
         display: block;
@@ -1006,6 +1024,14 @@
             <a href="https://github.com/nvk/ascii-banner">GitHub</a>
           </div>
         </details>
+        <details class="nav-group" open>
+          <summary>More by nvk</summary>
+          <div class="nav-links">
+            <a href="#more-by-nvk">More by nvk</a>
+            <a href="https://llm-wiki.net">llm-wiki.net</a>
+            <a href="https://learntoprompt.org">learntoprompt.org</a>
+          </div>
+        </details>
       </nav>
     </aside>
     <main id="top">
@@ -1019,6 +1045,7 @@
         <a href="#static-gallery">Static examples</a>
         <a href="#font-gallery">All fonts</a>
         <a href="#flag-reference">Flag reference</a>
+        <a href="#more-by-nvk">More by nvk</a>
       </nav>
     </header>
 
@@ -1604,6 +1631,25 @@ ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
         <div class="card"><h3>Animation differs between runs</h3><p>Set <code>--seed</code> for randomized effects such as matrix, decrypt, glitch, sparkle, and fireworks.</p></div>
       </div>
     </section>
+
+    <section aria-labelledby="more-by-nvk">
+      <h2 id="more-by-nvk">More by nvk <a class="anchor" href="#more-by-nvk">#</a></h2>
+      <p class="muted">Other projects from nvk that pair well with terminal-first tools and LLM-assisted workflows.</p>
+      <div class="cards">
+        <div class="card">
+          <h3><a href="https://llm-wiki.net">llm-wiki.net</a></h3>
+          <p>LLM Wiki is a research and knowledge-base system for collecting sources, tracking provenance, and compiling LLM-readable project docs.</p>
+        </div>
+        <div class="card">
+          <h3><a href="https://learntoprompt.org">learntoprompt.org</a></h3>
+          <p>Learn to Prompt is a practical prompt engineering guide for writing clearer instructions and building better language-model workflows.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      ascii-banner.com · by <a href="https://github.com/nvk">nvk</a> · more: <a href="https://llm-wiki.net">llm-wiki.net</a> · <a href="https://learntoprompt.org">learntoprompt.org</a>
+    </footer>
 
     </main>
   </div>
