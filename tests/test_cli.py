@@ -139,6 +139,57 @@ class TestCliOptions:
 
 
 # ---------------------------------------------------------------------------
+# Animation
+# ---------------------------------------------------------------------------
+
+class TestCliAnimation:
+    def test_animate_non_tty_prints_final_frame(self) -> None:
+        result = run_banner("--animate", "reveal", "Hi")
+        assert result.returncode == 0
+        assert len(result.stdout.strip()) > 0
+        assert "\033[H" not in result.stdout
+
+    def test_animate_with_color_preserves_ansi_color(self) -> None:
+        result = run_banner("--animate", "unfurl", "-c", "red", "Hi")
+        assert result.returncode == 0
+        assert "\033[38;2;255;0;0m" in result.stdout
+
+    def test_export_requires_animate(self, tmp_path) -> None:
+        result = run_banner("--export", str(tmp_path / "out.gif"), "Hi")
+        assert result.returncode == 2
+        assert "--export requires --animate" in result.stderr
+
+    def test_animate_rejects_svg(self) -> None:
+        result = run_banner("--animate", "reveal", "--svg", "-", "Hi")
+        assert result.returncode == 2
+        assert "incompatible with --svg" in result.stderr
+
+    def test_animate_rejects_multifont(self) -> None:
+        result = run_banner("--animate", "reveal", "-t", "classic", "Hi")
+        assert result.returncode == 2
+        assert "incompatible with multi-font" in result.stderr
+
+    def test_animate_accepts_shared_effect_options(self) -> None:
+        result = run_banner(
+            "--animate", "decrypt",
+            "--charset", "hex",
+            "--direction", "right",
+            "--axis", "rows",
+            "--by", "line",
+            "--intensity", "0.2",
+            "--palette", "accent",
+            "Hi",
+        )
+        assert result.returncode == 0
+        assert len(result.stdout.strip()) > 0
+
+    def test_animate_rejects_bad_intensity(self) -> None:
+        result = run_banner("--animate", "glitch", "--intensity", "2", "Hi")
+        assert result.returncode == 2
+        assert "--intensity" in result.stderr
+
+
+# ---------------------------------------------------------------------------
 # Edge cases
 # ---------------------------------------------------------------------------
 

@@ -275,6 +275,47 @@ SVG output currently supports figlet fonts that use only block +
 double-line box-drawing glyphs (ANSI Shadow and similar). Other fonts
 fail loudly with the offending codepoint.
 
+## Animations and Media Export
+
+Play canned terminal animations, or export them for the web.
+
+```bash
+# Play in an interactive terminal
+ascii-banner --animate reveal "Deploy"
+ascii-banner -f "ANSI Shadow" -c gradient:green:cyan --animate matrix "LLM WIKI"
+
+# Export animated assets
+ascii-banner --animate unfurl --export deploy.gif "Deploy"
+ascii-banner --animate matrix --seed 7 --duration 3 --export banner.mp4 "Launch"
+ascii-banner --animate reveal --export banner.mp4 --export banner.webm "Launch"
+```
+
+Effects: `reveal`, `unfurl`, `matrix`, `print`, `random`, `decrypt`,
+`wipe`, `middleout`, `slice`, `slide`, `scan`, `colorshift`, `glitch`,
+`waves`, `vhs`, `rain`, `sparkle`, `fireworks`, `laser`,
+`errorcorrect`, `pour`, `burn`, `smoke`, `pipes`, `starfield`,
+`bubbles`, `swarm`, `blackhole`, `synthgrid`, `thunderstorm`.
+
+Effect modifiers:
+
+```bash
+ascii-banner --animate decrypt --charset hex --seed 7 "Secure"
+ascii-banner --animate wipe --direction right "Deploy"
+ascii-banner --animate print --by line "Release"
+ascii-banner --animate colorshift --palette rainbow "Party"
+ascii-banner --animate glitch --intensity 0.2 "Incident"
+```
+
+GIF and WebP export require the optional media extra:
+
+```bash
+pip install "ascii-banner[media]"
+```
+
+MP4 and WebM export also require `ffmpeg` on your `PATH`. GIF is the
+lowest-friction format for READMEs and issue trackers; MP4/H.264 and
+WebM/VP9 are better for normal web pages.
+
 ## Suppress Output
 
 ```bash
@@ -305,6 +346,22 @@ Useful for conditionally disabling banners in scripts or CI.
 | `--border STYLE` | | Border box: `single`, `double`, `rounded`, `heavy`, `ascii` |
 | `--comment LANG` | | Wrap as code comment for the given language |
 | `--quiet` | `-q` | Suppress all output |
+| `--animate EFFECT` | | Play/export animation effect |
+| `--export PATH` | | Export animation to `.gif`, `.mp4`, `.webm`, or `.webp`; repeatable |
+| `--fps N` | | Animation frames per second |
+| `--duration SECONDS` | | Animation duration |
+| `--loop N` | | Animation loop count; `0` means infinite where supported |
+| `--seed N` | | Deterministic seed for randomized animations |
+| `--direction DIR` | | Direction for wipe/slide effects: `left`, `right`, `up`, `down` |
+| `--by MODE` | | Reveal unit: `char`, `line`, `row`, `column` |
+| `--axis AXIS` | | Axis for effects such as `middleout`/`slice`: `horizontal`, `vertical`, `both`, `rows`, `cols` |
+| `--charset CHARS` | | Character set for matrix/decrypt/glitch: `ascii`, `binary`, `hex`, or literal chars |
+| `--intensity N` | | Effect intensity from `0` to `1` |
+| `--palette NAME` | | Animation palette: `accent`, `rainbow`, `fire`, `ocean` |
+| `--cell-width N` | | Media export cell width in pixels |
+| `--cell-height N` | | Media export cell height in pixels |
+| `--media-font PATH` | | Optional monospace font file for media export |
+| `--bg COLOR` | | Media export background color name or `#rrggbb` |
 
 ### Subcommands
 

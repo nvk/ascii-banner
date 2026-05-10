@@ -6,10 +6,15 @@ from __future__ import annotations
 
 import argparse
 import os
+from pathlib import Path
 import sys
 
+from . import animation as animod
+from . import canvas as canvasmod
 from . import color as colormod
+from . import media as mediamod
 from . import parser, renderer, svg as svgmod
+from . import terminal as terminalmod
 from .border import wrap as border_wrap, list_styles as border_styles
 from .categories import (
     CATEGORIES,
@@ -39,6 +44,7 @@ def main() -> None:
             return
 
     args = parse_args()
+    _validate_output_args(args)
 
     if args.quiet:
         return
@@ -93,6 +99,10 @@ def main() -> None:
             print("--svg is incompatible with multi-font mode (-a/-t/-s)",
                   file=sys.stderr)
             sys.exit(2)
+        if args.animate or args.exports:
+            print("--animate/--export is incompatible with multi-font mode (-a/-t/-s)",
+                  file=sys.stderr)
+            sys.exit(2)
         font_names = sort_fonts(font_names, args.sort)
         _render_multiple(font_names, text, width, args)
         return
@@ -104,6 +114,10 @@ def main() -> None:
         font = _load_font_fuzzy(args.font)
 
     output = _render_text(font, text, width, args.justify)
+
+    if args.animate:
+        _emit_animation(output, args)
+        return
 
     if args.svg is not None:
         _emit_svg(output, args)
@@ -142,6 +156,61 @@ def _emit_svg(banner: str, args: argparse.Namespace) -> None:
         print(f"wrote {args.svg}", file=sys.stderr)
 
 
+def _emit_animation(banner: str, args: argparse.Namespace) -> None:
+    """Build animation frames and play or export them."""
+    plain = _apply_plain_postprocess(banner, args)
+    final_canvas = canvasmod.Canvas.from_text(plain)
+    if args.color:
+        final_canvas = canvasmod.apply_color(final_canvas, args.color)
+
+    fps = _animation_fps(args)
+    anim_options = animod.AnimationOptions(
+        effect=args.animate,
+        fps=fps,
+        duration=args.duration,
+        loop=args.loop,
+        seed=args.seed,
+        direction=args.direction,
+        by=args.by,
+        axis=args.axis,
+        charset=args.charset,
+        intensity=args.intensity,
+        palette=args.palette,
+    )
+    try:
+        frames = animod.build_animation(final_canvas, anim_options)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        sys.exit(2)
+
+    if args.exports:
+        bg = canvasmod.parse_rgb(args.bg)
+        if bg is None:
+            print(f"error: invalid --bg color: {args.bg}", file=sys.stderr)
+            sys.exit(2)
+        export_options = mediamod.ExportOptions(
+            fps=fps,
+            loop=args.loop,
+            cell_width=args.cell_width,
+            cell_height=args.cell_height,
+            bg=bg,
+            font_path=args.media_font,
+        )
+        for target in args.exports:
+            try:
+                mediamod.export(frames, target, export_options)
+            except mediamod.MediaExportError as e:
+                print(f"error: {e}", file=sys.stderr)
+                sys.exit(1)
+            print(f"wrote {target}", file=sys.stderr)
+        return
+
+    if sys.stdout.isatty():
+        terminalmod.play(frames, fps=fps, loop=args.loop)
+    else:
+        sys.stdout.write(terminalmod.render_static(frames[-1].canvas) + "\n")
+
+
 def _load_font_fuzzy(name: str) -> parser.Font:
     """Load font by name with fuzzy matching fallback."""
     try:
@@ -178,11 +247,18 @@ def _render_text(font: parser.Font, text: str, width: int, justify: str) -> str:
 
 def _apply_postprocess(output: str, args: argparse.Namespace) -> str:
     """Apply border, color, and comment formatting."""
-    if args.border:
-        output = border_wrap(output, args.border)
+    output = _apply_plain_postprocess(output, args)
 
     if args.color:
         output = colormod.apply(output, args.color)
+
+    return output
+
+
+def _apply_plain_postprocess(output: str, args: argparse.Namespace) -> str:
+    """Apply post-processing that does not insert ANSI escape codes."""
+    if args.border:
+        output = border_wrap(output, args.border)
 
     if args.comment:
         output = format_comment(output, args.comment)
@@ -347,7 +423,83 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--svg-merge", action="store_true",
                     help="SVG: merge adjacency-aligned rects (smaller file)")
 
+    ap.add_argument("--animate", type=str.lower, choices=animod.EFFECTS,
+                    help="play or export a canned animation")
+    ap.add_argument("--export", dest="exports", action="append", metavar="PATH",
+                    help="export animation to .gif, .mp4, .webm, or .webp "
+                         "(repeatable)")
+    ap.add_argument("--fps", type=int, default=None,
+                    help="animation frames per second (default: 12, or 24 for video)")
+    ap.add_argument("--duration", type=float,
+                    help="animation duration in seconds")
+    ap.add_argument("--loop", type=int, default=1,
+                    help="animation loop count; 0 means infinite where supported")
+    ap.add_argument("--seed", type=int,
+                    help="deterministic seed for randomized animations")
+    ap.add_argument("--direction", choices=animod.DIRECTIONS, default="left",
+                    help="animation direction for wipe/slide-style effects")
+    ap.add_argument("--by", choices=animod.BY_MODES, default="char",
+                    help="animation reveal unit for reveal/print effects")
+    ap.add_argument("--axis", choices=animod.AXES, default="both",
+                    help="animation axis for middleout/slice/waves-style effects")
+    ap.add_argument("--charset",
+                    help="character set for matrix/decrypt/glitch effects "
+                         "(ascii, binary, hex, or literal characters)")
+    ap.add_argument("--intensity", type=float, default=0.35,
+                    help="effect intensity from 0 to 1")
+    ap.add_argument("--palette", choices=animod.PALETTES, default="accent",
+                    help="animation color palette (default: accent)")
+    ap.add_argument("--cell-width", type=int, default=10,
+                    help="media export cell width in pixels")
+    ap.add_argument("--cell-height", type=int, default=18,
+                    help="media export cell height in pixels")
+    ap.add_argument("--media-font",
+                    help="optional monospace TTF/OTF/TTC path for media export")
+    ap.add_argument("--bg", default="black",
+                    help="media export background color name or #rrggbb")
+
     return ap.parse_args()
+
+
+def _validate_output_args(args: argparse.Namespace) -> None:
+    if args.exports and not args.animate:
+        print("error: --export requires --animate", file=sys.stderr)
+        sys.exit(2)
+    if args.animate and args.svg is not None:
+        print("error: --animate is incompatible with --svg", file=sys.stderr)
+        sys.exit(2)
+    if args.fps is not None and args.fps <= 0:
+        print("error: --fps must be greater than zero", file=sys.stderr)
+        sys.exit(2)
+    if args.duration is not None and args.duration <= 0:
+        print("error: --duration must be greater than zero", file=sys.stderr)
+        sys.exit(2)
+    if args.loop < 0:
+        print("error: --loop must be zero or greater", file=sys.stderr)
+        sys.exit(2)
+    if not 0 <= args.intensity <= 1:
+        print("error: --intensity must be between 0 and 1", file=sys.stderr)
+        sys.exit(2)
+    if args.charset == "":
+        print("error: --charset cannot be empty", file=sys.stderr)
+        sys.exit(2)
+    if args.cell_width <= 0 or args.cell_height <= 0:
+        print("error: --cell-width and --cell-height must be greater than zero",
+              file=sys.stderr)
+        sys.exit(2)
+    if args.media_font and not Path(args.media_font).exists():
+        print(f"error: --media-font not found: {args.media_font}", file=sys.stderr)
+        sys.exit(2)
+
+
+def _animation_fps(args: argparse.Namespace) -> int:
+    if args.fps is not None:
+        return args.fps
+    if args.exports:
+        video_exts = {".mp4", ".webm"}
+        if any(Path(target).suffix.lower() in video_exts for target in args.exports):
+            return 24
+    return 12
 
 
 if __name__ == "__main__":
