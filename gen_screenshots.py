@@ -11,6 +11,8 @@ from rich.terminal_theme import DIMMED_MONOKAI
 DIR = Path(__file__).parent / "screenshots"
 DIR.mkdir(exist_ok=True)
 
+URL = "ascii-banner.com"
+
 
 def run(*args: str) -> str:
     r = subprocess.run(
@@ -20,9 +22,15 @@ def run(*args: str) -> str:
     return r.stdout.rstrip("\n")
 
 
+def _footer(console: Console) -> None:
+    console.print()
+    console.print(Text(URL, style="dim"))
+
+
 def save_svg(content: str, filename: str, title: str = "ascii-banner", width: int = 100) -> None:
     console = Console(file=None, record=True, width=width, force_terminal=True)
     console.print(Text.from_ansi(content))
+    _footer(console)
     svg = console.export_svg(title=title, theme=DIMMED_MONOKAI)
     (DIR / filename).write_text(svg)
     print(f"  {filename}")
@@ -36,6 +44,7 @@ def save_svg_with_cmd(cmd: str, args: list[str], filename: str, width: int = 100
     console.print(prompt)
     console.print()
     console.print(Text.from_ansi(output))
+    _footer(console)
     svg = console.export_svg(title="ascii-banner", theme=DIMMED_MONOKAI)
     (DIR / filename).write_text(svg)
     print(f"  {filename}")
@@ -65,6 +74,7 @@ def main() -> None:
     console.print(Text("$ ", style="green") + Text('ascii-banner -f Banner3 -c "#ff9900" "BITCOIN"', style="white"))
     console.print()
     console.print(Text.from_ansi(out2))
+    _footer(console)
     (DIR / "fonts-showcase.svg").write_text(console.export_svg(title="ascii-banner", theme=THEME))
     print("  fonts-showcase.svg")
 
@@ -103,6 +113,7 @@ def main() -> None:
     console.print(Text("$ ", style="green") + Text('ascii-banner -t gothic -s md "DOOM"', style="white"))
     console.print()
     console.print(Text.from_ansi("\n".join(trimmed)))
+    _footer(console)
     (DIR / "tags.svg").write_text(console.export_svg(title="ascii-banner", theme=THEME))
     print("  tags.svg")
 
