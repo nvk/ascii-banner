@@ -10,7 +10,7 @@
       --bg: #080b0d;
       --surface: #10161a;
       --surface-2: #151d22;
-      --line: #2a3741;
+      --line: #2a2f33;
       --text: #edf5f1;
       --muted: #a7b7b0;
       --green: #00ff66;
@@ -44,7 +44,7 @@
     kbd {
       color: #d8efe8;
       background: var(--code);
-      border-radius: 5px;
+      border-radius: 0;
     }
 
     code,
@@ -66,9 +66,98 @@
       border-radius: 0;
     }
 
-    main {
-      max-width: 1420px;
+    .site-shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 0;
+      max-width: 1760px;
       margin: 0 auto;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 22px 14px;
+      border-right: 1px solid var(--line);
+      background: rgba(8, 11, 13, 0.96);
+      overflow-y: auto;
+    }
+
+    .side-nav strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .nav-menu {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-menu > a,
+    .nav-links a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 0;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .nav-menu > a:hover,
+    .nav-menu > a:focus,
+    .nav-menu > a.active,
+    .nav-links a:hover,
+    .nav-links a:focus,
+    .nav-links a.active {
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 3px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-group summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 3px 7px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    .nav-group summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .nav-group summary::before {
+      content: "+ ";
+      color: var(--green);
+    }
+
+    .nav-group[open] summary::before {
+      content: "- ";
+    }
+
+    .nav-links {
+      display: grid;
+      gap: 3px;
+    }
+
+    .nav-links a {
+      padding-left: 16px;
+    }
+
+    main {
+      min-width: 0;
+      max-width: 1420px;
       padding: 28px 18px 52px;
     }
 
@@ -122,7 +211,9 @@
     .cards,
     .flag-grid,
     .recipe-grid,
-    .gallery-grid {
+    .gallery-grid,
+    .static-grid,
+    .font-grid {
       display: grid;
       gap: 12px;
     }
@@ -136,7 +227,7 @@
       display: block;
       border: 1px solid var(--line);
       background: var(--surface);
-      border-radius: 8px;
+      border-radius: 0;
       padding: 11px 12px;
       text-decoration: none;
     }
@@ -158,7 +249,7 @@
     .callout {
       border: 1px solid var(--line);
       background: var(--surface);
-      border-radius: 8px;
+      border-radius: 0;
       padding: 12px;
     }
 
@@ -173,7 +264,9 @@
 
     .cards,
     .flag-grid,
-    .recipe-grid {
+    .recipe-grid,
+    .static-grid,
+    .font-grid {
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       margin-top: 12px;
     }
@@ -181,6 +274,8 @@
     .card p,
     .flag p,
     .recipe p,
+    .static-card p,
+    .font-card p,
     .callout p,
     td {
       color: var(--muted);
@@ -201,7 +296,7 @@
       border-collapse: collapse;
       border: 1px solid var(--line);
       background: var(--surface);
-      border-radius: 8px;
+      border-radius: 0;
       overflow: hidden;
     }
 
@@ -227,7 +322,9 @@
       overflow-x: auto;
     }
 
-    .gallery-grid {
+    .gallery-grid,
+    .static-grid,
+    .font-grid {
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       margin-top: 14px;
     }
@@ -236,7 +333,7 @@
       margin: 0;
       border: 1px solid var(--line);
       background: var(--surface-2);
-      border-radius: 8px;
+      border-radius: 0;
       overflow: hidden;
     }
 
@@ -268,7 +365,7 @@
 
     .chip {
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 0;
       padding: 2px 8px;
       color: var(--muted);
       font-size: 12px;
@@ -289,9 +386,556 @@
       font-size: 12px;
     }
 
+    .static-card,
+    .font-card {
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .static-card header,
+    .font-card header {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .static-card pre,
+    .font-card pre {
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .sample-output {
+      min-height: 116px;
+    }
+
+    .example-preview-wrap {
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .preview-label {
+      color: var(--green);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .example-preview {
+      min-height: 76px;
+      max-height: 240px;
+      margin: 0;
+      border: 1px solid var(--line);
+      background: #000;
+      color: var(--text);
+      font-size: 11px;
+      line-height: 1.35;
+      overflow: auto;
+    }
+
+    .sample-green {
+      color: var(--green);
+    }
+
+    .sample-orange {
+      color: var(--orange);
+    }
+
+    .sample-rainbow {
+      color: #80e6cf;
+      text-shadow:
+        0.08em 0 #ff6680,
+        0.16em 0 #ffc46b,
+        0.24em 0 #00ff66;
+    }
+
+    .sample-gradient {
+      color: #9bbcff;
+      background:
+        linear-gradient(90deg, #ff5c5c, #6aa9ff),
+        var(--code);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sample-spectrum {
+      color: #80e6cf;
+      background:
+        linear-gradient(90deg, #ff5c5c, #ffc46b, #00ff66, #58c7ff, #c78cff),
+        var(--code);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(140px, 190px));
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .controls label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      padding: 7px 9px;
+    }
+
+    .font-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .font-meta .chip {
+      border-radius: 0;
+    }
+
+    .font-preview {
+      font-size: 12px;
+      min-height: 90px;
+    }
+
     .anchor {
       color: var(--muted);
       text-decoration: none;
+    }
+
+    /* Terminal skin overrides */
+    :root {
+      --bg: #010302;
+      --surface: #050906;
+      --surface-2: #07110a;
+      --line: #2a2f33;
+      --text: #d8ffe4;
+      --muted: #7fa88b;
+      --green: #39ff88;
+      --orange: #ff9b2f;
+      --link: #6dffb1;
+      --code: #000;
+      --warn: #ffcf6d;
+    }
+
+    *,
+    *::before,
+    *::after {
+      border-radius: 0 !important;
+    }
+
+    body {
+      background:
+        linear-gradient(rgba(57, 255, 136, 0.025) 50%, transparent 50%) 0 0 / 100% 4px,
+        radial-gradient(circle at 50% -20%, rgba(57, 255, 136, 0.1), transparent 32rem),
+        var(--bg);
+      text-shadow: 0 0 10px rgba(57, 255, 136, 0.08);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.025), transparent 18%, rgba(57, 255, 136, 0.025));
+      mix-blend-mode: screen;
+      opacity: 0.45;
+      z-index: 999;
+    }
+
+    .site-shell {
+      max-width: none;
+    }
+
+    .side-nav {
+      padding: 12px 10px;
+      background: #020503;
+      border-right: 1px solid var(--line);
+      box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .side-nav strong {
+      margin-bottom: 10px;
+      color: var(--green);
+      letter-spacing: 0;
+    }
+
+    .side-nav strong::before {
+      content: "$ ";
+      color: var(--muted);
+    }
+
+    .nav-menu > a,
+    .nav-links a {
+      padding: 5px 7px;
+      border-left: 2px solid transparent;
+      color: var(--green);
+    }
+
+    .nav-menu > a::before,
+    .nav-links a::before {
+      content: "> ";
+      color: #2f8f51;
+    }
+
+    .nav-menu > a:hover,
+    .nav-menu > a:focus,
+    .nav-menu > a.active,
+    .nav-links a:hover,
+    .nav-links a:focus,
+    .nav-links a.active {
+      background: #06130a;
+      border-left-color: var(--line);
+    }
+
+    .nav-menu {
+      gap: 8px;
+    }
+
+    .nav-group {
+      border-top-color: var(--line);
+    }
+
+    .nav-group summary {
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding-left: 16px;
+    }
+
+    .doc-search {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .doc-search label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .doc-search input {
+      min-height: 30px;
+      border-color: var(--line);
+      background: #000;
+    }
+
+    .search-results {
+      display: grid;
+      gap: 2px;
+      max-height: 210px;
+      overflow-y: auto;
+    }
+
+    .search-results a {
+      border-left: 0;
+      padding: 4px 6px;
+      color: var(--muted);
+      background: #020503;
+    }
+
+    .search-results a strong {
+      display: inline;
+      color: var(--green);
+      font-size: inherit;
+    }
+
+    main {
+      padding: 16px 14px 36px;
+    }
+
+    .hero {
+      gap: 10px;
+      padding: 10px 0 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::before {
+      content: "ascii-banner@docs:~$ ./guide --examples --all-fonts";
+      display: block;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      background: #020503;
+      color: var(--green);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    h1 {
+      font-size: clamp(24px, 3.8vw, 42px);
+    }
+
+    h1::before {
+      content: "# ";
+      color: var(--green);
+    }
+
+    h2 {
+      margin: 26px 0 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      font-size: 20px;
+    }
+
+    h2::before {
+      content: "## ";
+      color: var(--green);
+    }
+
+    section > h3 {
+      margin-top: 14px;
+      color: var(--green);
+      font-size: 15px;
+    }
+
+    section > h3::before {
+      content: ":: ";
+      color: var(--muted);
+    }
+
+    .lede {
+      max-width: 980px;
+      font-size: 14px;
+    }
+
+    .top-links,
+    .toc,
+    .summary,
+    .cards,
+    .flag-grid,
+    .recipe-grid,
+    .gallery-grid,
+    .static-grid,
+    .font-grid {
+      gap: 8px;
+    }
+
+    .top-links {
+      grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    }
+
+    .top-links a,
+    .toc a,
+    .summary div,
+    .card,
+    .flag,
+    .recipe,
+    .callout,
+    .static-card,
+    .font-card,
+    figure,
+    table,
+    input,
+    select {
+      border-color: var(--line);
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px rgba(57, 255, 136, 0.035);
+    }
+
+    .top-links a,
+    .toc a {
+      padding: 7px 8px;
+    }
+
+    .top-links a::before,
+    .toc a::before {
+      content: "[";
+      color: var(--muted);
+    }
+
+    .top-links a::after,
+    .toc a::after {
+      content: "]";
+      color: var(--muted);
+    }
+
+    .summary {
+      margin: 10px 0 8px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .summary div,
+    .card,
+    .flag,
+    .recipe,
+    .callout {
+      padding: 8px;
+    }
+
+    .summary span,
+    .flag span,
+    .recipe span {
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    pre {
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: #000;
+      scrollbar-color: var(--line) #000;
+    }
+
+    code,
+    kbd {
+      background: #000;
+    }
+
+    .gallery-grid,
+    .static-grid,
+    .font-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-top: 8px;
+    }
+
+    figure img {
+      min-height: 74px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    figcaption,
+    .static-card header,
+    .font-card header {
+      gap: 7px;
+      padding: 8px;
+    }
+
+    .chip {
+      border-color: var(--line);
+      padding: 1px 5px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .chip,
+    .chip.green,
+    .chip.orange,
+    .callout {
+      border-color: var(--line);
+    }
+
+    .chip::before {
+      content: "[";
+      color: var(--muted);
+    }
+
+    .chip::after {
+      content: "]";
+      color: var(--muted);
+    }
+
+    .title-row {
+      align-items: baseline;
+    }
+
+    .command,
+    .font-preview,
+    .sample-output,
+    .example-preview {
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .sample-output,
+    .example-preview {
+      min-height: 84px;
+      max-height: 220px;
+    }
+
+    .font-preview {
+      min-height: 70px;
+      max-height: 180px;
+    }
+
+    .controls {
+      grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(110px, 160px));
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    input,
+    select {
+      min-height: 32px;
+      padding: 5px 7px;
+    }
+
+    th,
+    td {
+      padding: 7px 8px;
+    }
+
+    @media (max-width: 980px) {
+      .site-shell {
+        display: block;
+      }
+
+      .side-nav {
+        position: sticky;
+        z-index: 10;
+        height: auto;
+        max-height: 42vh;
+        padding: 10px 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .doc-search {
+        grid-template-columns: 84px minmax(180px, 1fr);
+        align-items: center;
+      }
+
+      .search-results {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        max-height: 110px;
+      }
+
+      .nav-menu > a,
+      .nav-links a {
+        white-space: nowrap;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .nav-group {
+        min-width: 180px;
+        border-top: 0;
+        border-left: 1px solid var(--line);
+        padding-top: 0;
+      }
+
+      .controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 720px) {
@@ -299,7 +943,13 @@
         padding-inline: 12px;
       }
 
-      .gallery-grid {
+      .gallery-grid,
+      .static-grid,
+      .font-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
         grid-template-columns: 1fr;
       }
 
@@ -311,7 +961,54 @@
   </style>
 </head>
 <body>
-  <main>
+  <div class="site-shell">
+    <aside class="side-nav" aria-label="Documentation navigation">
+      <strong>ascii-banner</strong>
+      <div class="doc-search">
+        <label for="doc-search">Search</label>
+        <input id="doc-search" type="search" placeholder="fonts, flags, effects">
+        <div class="search-results" id="doc-search-results" aria-live="polite"></div>
+      </div>
+      <nav class="nav-menu">
+        <a href="/">Home</a>
+        <details class="nav-group" open>
+          <summary>Guide</summary>
+          <div class="nav-links">
+            <a href="/docs/">Full guide</a>
+            <a class="active" href="#top" aria-current="page">Guide top</a>
+            <a href="#install">Install</a>
+            <a href="#quick-start">Quick start</a>
+            <a href="#input">Input</a>
+            <a href="#fonts">Fonts</a>
+            <a href="#color">Color</a>
+            <a href="#layout">Layout</a>
+            <a href="#borders">Borders</a>
+            <a href="#comments">Comments</a>
+            <a href="#svg">SVG</a>
+            <a href="#animations">Animations</a>
+            <a href="#media-export">Media export</a>
+          </div>
+        </details>
+        <details class="nav-group" open>
+          <summary>Galleries</summary>
+          <div class="nav-links">
+            <a href="#animation-gallery">Animation gallery</a>
+            <a href="#static-gallery">Static examples</a>
+            <a href="#font-gallery">All fonts</a>
+          </div>
+        </details>
+        <details class="nav-group" open>
+          <summary>Reference</summary>
+          <div class="nav-links">
+            <a href="#recipes">Recipes</a>
+            <a href="#flag-reference">Flags</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+            <a href="https://github.com/nvk/ascii-banner">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </aside>
+    <main id="top">
     <header class="hero">
       <h1>ascii-banner docs and examples</h1>
       <p class="lede">A practical guide to rendering text as FIGlet banners, choosing fonts, adding color and borders, formatting comments, exporting SVG, playing terminal animations, and producing GIF, WebP, MP4, and WebM assets for the web.</p>
@@ -319,6 +1016,8 @@
         <a href="/">Website home</a>
         <a href="https://github.com/nvk/ascii-banner">GitHub repository</a>
         <a href="#animation-gallery">Animation gallery</a>
+        <a href="#static-gallery">Static examples</a>
+        <a href="#font-gallery">All fonts</a>
         <a href="#flag-reference">Flag reference</a>
       </nav>
     </header>
@@ -348,15 +1047,52 @@
       <div class="gallery-grid" id="orange-grid"></div>
 
       <h3>Other export formats</h3>
-      <pre><code>ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.gif "LLM-WIKI"
-ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.webp "LLM-WIKI"
-ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --export matrix.mp4 "LLM-WIKI"
-ascii-banner -f Slant -c green --animate reveal --export reveal.mp4 --export reveal.webm "LLM-WIKI"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>GIF gallery asset</h3><pre><code>ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --loop 0 --export matrix.gif "LLM-WIKI"</code></pre></div>
+        <div class="card"><h3>Animated WebP asset</h3><pre><code>ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --loop 0 --export matrix.webp "LLM-WIKI"</code></pre></div>
+        <div class="card"><h3>MP4 video asset</h3><pre><code>ascii-banner -f Slant -c green --animate matrix --duration 3 --fps 15 --seed 21 --loop 0 --export matrix.mp4 "LLM-WIKI"</code></pre></div>
+        <div class="card"><h3>Multi-format export</h3><pre><code>ascii-banner -f Slant -c green --animate reveal --loop 0 --export reveal.mp4 --export reveal.webm "LLM-WIKI"</code></pre></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="static-gallery">
+      <h2 id="static-gallery">Static Examples <a class="anchor" href="#static-gallery">#</a></h2>
+      <p class="muted">Static examples show normal terminal output variations: font choices, color styling, borders, layout, and comment formatting. Each card includes the exact command that produced the output.</p>
+      <div class="summary">
+        <div><span>Examples</span>26 static variations</div>
+        <div><span>Output</span>Plain terminal text previews</div>
+        <div><span>Commands</span>Flags shown under every example</div>
+        <div><span>Groups</span>Basics, fonts, colors, borders, layout, comments</div>
+      </div>
+      <div class="static-grid" id="static-grid"></div>
+    </section>
+
+    <section aria-labelledby="font-gallery">
+      <h2 id="font-gallery">All Fonts <a class="anchor" href="#font-gallery">#</a></h2>
+      <p class="muted">All 328 bundled FIGlet fonts are shown with a small <code>Aa1</code> preview, size bucket, legibility rating, tags, and the command to use that font.</p>
+      <div class="controls" aria-label="Font gallery filters">
+        <label>Search
+          <input id="font-search" type="search" placeholder="Font name or tag">
+        </label>
+        <label>Tag
+          <select id="font-tag"></select>
+        </label>
+        <label>Size
+          <select id="font-size"></select>
+        </label>
+        <label>Legibility
+          <select id="font-legibility"></select>
+        </label>
+      </div>
+      <p class="muted" id="font-count">Loading fonts...</p>
+      <div class="font-grid" id="font-grid"></div>
     </section>
 
     <section aria-labelledby="contents">
       <h2 id="contents">Guide Contents <a class="anchor" href="#contents">#</a></h2>
       <nav class="toc" aria-label="Documentation sections">
+        <a href="#static-gallery">Static examples</a>
+        <a href="#font-gallery">All fonts</a>
         <a href="#install">Install</a>
         <a href="#mental-model">Mental model</a>
         <a href="#quick-start">Quick start</a>
@@ -408,23 +1144,14 @@ brew install ffmpeg</code></pre>
 
     <section aria-labelledby="quick-start">
       <h2 id="quick-start">Quick Start <a class="anchor" href="#quick-start">#</a></h2>
-      <pre><code># Default font
-ascii-banner "Hello"
-
-# Pick a font
-ascii-banner -f Doom "Hello"
-
-# Pipe input
-echo "Hello" | ascii-banner -f Big
-
-# Color and border
-ascii-banner -f Slant -c red --border rounded "Deploy"
-
-# Center inside an 80-column output
-ascii-banner -f Big -w 80 -j center "Ship"
-
-# Save to a text file
-ascii-banner -f Standard "Release" > banner.txt</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Default font</h3><p>Render a banner with the bundled default font.</p><pre><code>ascii-banner "Hello"</code></pre></div>
+        <div class="card"><h3>Pick a font</h3><p>Use <code>-f</code> for a specific bundled FIGlet font.</p><pre><code>ascii-banner -f Doom "Hello"</code></pre></div>
+        <div class="card"><h3>Pipe input</h3><p>Read text from stdin when no positional text is supplied.</p><pre><code>printf "Hello" | ascii-banner -f Big</code></pre></div>
+        <div class="card"><h3>Color and border</h3><p>Combine color with a border style in one command.</p><pre><code>ascii-banner -f Slant -c red --border rounded "Deploy"</code></pre></div>
+        <div class="card"><h3>Center in width</h3><p>Use <code>-w</code> with <code>-j center</code> to align within a fixed width.</p><pre><code>ascii-banner -f Big -w 80 -j center "Ship"</code></pre></div>
+        <div class="card"><h3>Save text output</h3><p>Redirect normal terminal text into a file.</p><pre><code>ascii-banner -f Standard "Release" > banner.txt</code></pre></div>
+      </div>
     </section>
 
     <section aria-labelledby="input">
@@ -441,28 +1168,19 @@ NO_BANNER=1 ascii-banner "hidden"</code></pre></div>
     <section aria-labelledby="fonts">
       <h2 id="fonts">Fonts <a class="anchor" href="#fonts">#</a></h2>
       <p class="muted">Fonts are bundled FIGlet <code>.flf</code> files. The font picker supports fuzzy matching, so small typos usually resolve to a nearby font.</p>
-      <pre><code># List all fonts
-ascii-banner list
-
-# List fonts in a category or size bucket
-ascii-banner list block
-ascii-banner list sm
-
-# Preview every font in its own style
-ascii-banner list --preview
-
-# Render your text in all fonts
-ascii-banner --all "Test"
-
-# Render a category or size subset
-ascii-banner -t gothic "Test"
-ascii-banner -s xl "Test"
-
-# Combine filters and sort by readability
-ascii-banner -t block -s md --sort legibility "Test"
-
-# Load a font file outside the bundled set
-ascii-banner -F ./my-font.flf "Custom"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>List names</h3><p>Show bundled fonts and metadata without rendering your text.</p><pre><code>ascii-banner list</code></pre></div>
+        <div class="card"><h3>List a tag</h3><p>Filter the font list by category tag.</p><pre><code>ascii-banner list block</code></pre></div>
+        <div class="card"><h3>List a size bucket</h3><p>Filter the font list by approximate rendered height.</p><pre><code>ascii-banner list sm</code></pre></div>
+        <div class="card"><h3>Preview all fonts</h3><p>Render each font name in its own style.</p><pre><code>ascii-banner list --preview</code></pre></div>
+        <div class="card"><h3>Named font</h3><p>Render once with one bundled font.</p><pre><code>ascii-banner -f Slant "Test"</code></pre></div>
+        <div class="card"><h3>Fuzzy font name</h3><p>Small typos resolve to the closest bundled font.</p><pre><code>ascii-banner -f slnt "Test"</code></pre></div>
+        <div class="card"><h3>All fonts</h3><p>Render your text in every bundled font.</p><pre><code>ascii-banner --all "Test"</code></pre></div>
+        <div class="card"><h3>Tag render</h3><p>Render your text in fonts with a specific tag.</p><pre><code>ascii-banner -t gothic "Test"</code></pre></div>
+        <div class="card"><h3>Size render</h3><p>Render your text in a size bucket. This is multi-font output.</p><pre><code>ascii-banner -s xl "Test"</code></pre></div>
+        <div class="card"><h3>Sorted subset</h3><p>Combine filters and sort by readability.</p><pre><code>ascii-banner -t block -s md --sort legibility "Test"</code></pre></div>
+        <div class="card"><h3>Custom font file</h3><p>Use a local FIGlet <code>.flf</code> file path.</p><pre><code>ascii-banner -F /path/to/my-font.flf "Custom"</code></pre></div>
+      </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Tag</th><th>Use it when you want</th></tr></thead>
@@ -521,6 +1239,20 @@ ascii-banner -c gradient:#ff0000:#00ff00 "Xmas"
 
 # Smooth full-spectrum gradient
 ascii-banner -c gradient:rainbow "Spectrum"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Success green</h3><pre><code>ascii-banner -f Slant -c green "OK"</code></pre></div>
+        <div class="card"><h3>Bitcoin orange</h3><pre><code>ascii-banner -f Slant -c orange "Bitcoin"</code></pre></div>
+        <div class="card"><h3>Terminal cyan</h3><pre><code>ascii-banner -f Standard -c cyan "Docs"</code></pre></div>
+        <div class="card"><h3>Hot magenta</h3><pre><code>ascii-banner -f Doom -c magenta "Launch"</code></pre></div>
+        <div class="card"><h3>Exact hex green</h3><pre><code>ascii-banner -f Small -c "#39ff88" "Prompt"</code></pre></div>
+        <div class="card"><h3>Exact hex orange</h3><pre><code>ascii-banner -f Small -c "#ff8000" "Sats"</code></pre></div>
+        <div class="card"><h3>Rainbow letters</h3><pre><code>ascii-banner -f Big -c rainbow "Party"</code></pre></div>
+        <div class="card"><h3>Warm gradient</h3><pre><code>ascii-banner -f Slant -c gradient:red:yellow "Fire"</code></pre></div>
+        <div class="card"><h3>Cool gradient</h3><pre><code>ascii-banner -f Slant -c gradient:blue:cyan "Ocean"</code></pre></div>
+        <div class="card"><h3>Hex gradient</h3><pre><code>ascii-banner -f "ANSI Shadow" -c gradient:#39ff88:#00d5ff "Agent"</code></pre></div>
+        <div class="card"><h3>Rainbow gradient</h3><pre><code>ascii-banner -f Standard -c gradient:rainbow "Spectrum"</code></pre></div>
+        <div class="card"><h3>Color with border</h3><pre><code>ascii-banner -f Slant -c orange --border heavy "Signal"</code></pre></div>
+      </div>
       <div class="callout"><p><strong>Terminal note:</strong> redirecting ANSI-colored output to a file preserves escape codes. Use SVG or media export if you need a clean visual asset instead of terminal text.</p></div>
     </section>
 
@@ -529,7 +1261,12 @@ ascii-banner -c gradient:rainbow "Spectrum"</code></pre>
       <div class="cards">
         <div class="card"><h3>Width</h3><p><code>-w</code> controls the maximum output width. Use it when centering, right-aligning, or constraining large fonts.</p><pre><code>ascii-banner -w 100 "Wide"</code></pre></div>
         <div class="card"><h3>Justify</h3><p><code>-j left</code>, <code>-j center</code>, and <code>-j right</code> align the rendered banner within the chosen width.</p><pre><code>ascii-banner -w 80 -j center "Center"</code></pre></div>
-        <div class="card"><h3>Font fit</h3><p>If a font is too wide for the terminal, choose a smaller size bucket, shorter text, or a narrower font.</p><pre><code>ascii-banner -s sm "Compact"</code></pre></div>
+        <div class="card"><h3>Font fit</h3><p>If a font is too wide for the terminal, choose a compact font, shorter text, or a wider layout.</p><pre><code>ascii-banner -f Small "Compact"</code></pre></div>
+        <div class="card"><h3>Left aligned</h3><pre><code>ascii-banner -f Standard -w 72 -j left "Left"</code></pre></div>
+        <div class="card"><h3>Centered release</h3><pre><code>ascii-banner -f Slant -w 100 -j center "Release"</code></pre></div>
+        <div class="card"><h3>Right aligned</h3><pre><code>ascii-banner -f Small -w 80 -j right "Done"</code></pre></div>
+        <div class="card"><h3>Bordered width</h3><pre><code>ascii-banner -f Small -w 72 -j center --border single "Build"</code></pre></div>
+        <div class="card"><h3>Narrow font choice</h3><p>Layout control is most predictable when paired with one explicit font.</p><pre><code>ascii-banner -f Small -w 52 -j center "Narrow"</code></pre></div>
       </div>
     </section>
 
@@ -544,6 +1281,14 @@ ascii-banner --border ascii "Hi"
 
 # Styled border example
 ascii-banner -f Slant -c cyan --border rounded "Deploy"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Single</h3><pre><code>ascii-banner --border single "Status"</code></pre></div>
+        <div class="card"><h3>Double</h3><pre><code>ascii-banner --border double "Archive"</code></pre></div>
+        <div class="card"><h3>Rounded</h3><pre><code>ascii-banner --border rounded "Deploy"</code></pre></div>
+        <div class="card"><h3>Heavy</h3><pre><code>ascii-banner --border heavy "Warning"</code></pre></div>
+        <div class="card"><h3>ASCII safe</h3><pre><code>ascii-banner --border ascii "Portable"</code></pre></div>
+        <div class="card"><h3>Centered box</h3><pre><code>ascii-banner -f Small -w 80 -j center --border double "CI"</code></pre></div>
+      </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Style</th><th>Use case</th></tr></thead>
@@ -579,6 +1324,16 @@ ascii-banner --comment xml "banner"
 
 # SQL-style comments
 ascii-banner --comment sql "schema"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Python module</h3><pre><code>ascii-banner -f Small --comment python "api client"</code></pre></div>
+        <div class="card"><h3>Shell script</h3><pre><code>ascii-banner -f Small --comment bash "deploy"</code></pre></div>
+        <div class="card"><h3>JavaScript header</h3><pre><code>ascii-banner -f Small --comment js "router"</code></pre></div>
+        <div class="card"><h3>Rust source</h3><pre><code>ascii-banner -f Small --comment rust "core"</code></pre></div>
+        <div class="card"><h3>CSS block</h3><pre><code>ascii-banner -f Small --comment css "theme"</code></pre></div>
+        <div class="card"><h3>HTML marker</h3><pre><code>ascii-banner -f Small --comment html "layout"</code></pre></div>
+        <div class="card"><h3>SQL migration</h3><pre><code>ascii-banner -f Small --comment sql "schema"</code></pre></div>
+        <div class="card"><h3>Bordered comment</h3><pre><code>ascii-banner -f Small --border ascii --comment python "settings"</code></pre></div>
+      </div>
       <p class="muted">Supported names include <code>bash</code>, <code>c</code>, <code>cpp</code>, <code>css</code>, <code>go</code>, <code>haskell</code>, <code>hs</code>, <code>html</code>, <code>java</code>, <code>javascript</code>, <code>js</code>, <code>lua</code>, <code>perl</code>, <code>python</code>, <code>ruby</code>, <code>rust</code>, <code>sh</code>, <code>shell</code>, <code>sql</code>, <code>ts</code>, <code>typescript</code>, and <code>xml</code>.</p>
     </section>
 
@@ -598,6 +1353,16 @@ ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode inset "LLM WIKI"
 
 # Tune double-line geometry and merge adjacent rectangles
 ascii-banner -f "ANSI Shadow" --svg out.svg --svg-stroke 15 --svg-gap 20 --svg-merge "LLM WIKI"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>File output</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg hero.svg "LLM WIKI"</code></pre></div>
+        <div class="card"><h3>Stdout pipeline</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - "Logo" > logo.svg</code></pre></div>
+        <div class="card"><h3>Default mode</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode default "A"</code></pre></div>
+        <div class="card"><h3>Inset mode</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode inset "A"</code></pre></div>
+        <div class="card"><h3>Extended blocks</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg out.svg --svg-mode extend "A"</code></pre></div>
+        <div class="card"><h3>Smaller SVG</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg out.svg --svg-merge "LLM"</code></pre></div>
+        <div class="card"><h3>Double-line tuning</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg out.svg --svg-stroke 12 --svg-gap 18 "Box"</code></pre></div>
+        <div class="card"><h3>README asset</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg docs/hero.svg --svg-merge "Project"</code></pre></div>
+      </div>
       <div class="callout"><p><strong>Compatibility note:</strong> SVG export intentionally fails on unsupported glyphs so you know when a FIGlet font cannot be represented by the rectangle renderer.</p></div>
     </section>
 
@@ -618,6 +1383,24 @@ ascii-banner --animate print --by line "Release"
 # Color and palette modifiers
 ascii-banner --animate colorshift --palette rainbow "Party"
 ascii-banner --animate glitch --intensity 0.2 "Incident"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Reveal by character</h3><pre><code>ascii-banner --animate reveal --by char "Deploy"</code></pre></div>
+        <div class="card"><h3>Reveal by line</h3><pre><code>ascii-banner --animate print --by line "Release"</code></pre></div>
+        <div class="card"><h3>Wipe from right</h3><pre><code>ascii-banner --animate wipe --direction right "Deploy"</code></pre></div>
+        <div class="card"><h3>Slide upward</h3><pre><code>ascii-banner --animate slide --direction up "Launch"</code></pre></div>
+        <div class="card"><h3>Middle out rows</h3><pre><code>ascii-banner --animate middleout --axis rows "Build"</code></pre></div>
+        <div class="card"><h3>Slice columns</h3><pre><code>ascii-banner --animate slice --axis cols "Split"</code></pre></div>
+        <div class="card"><h3>Hex decrypt</h3><pre><code>ascii-banner --animate decrypt --charset hex --seed 7 "Secure"</code></pre></div>
+        <div class="card"><h3>Binary matrix</h3><pre><code>ascii-banner --animate matrix --charset binary --seed 21 "Node"</code></pre></div>
+        <div class="card"><h3>Low glitch</h3><pre><code>ascii-banner --animate glitch --intensity 0.15 "Incident"</code></pre></div>
+        <div class="card"><h3>High sparkle</h3><pre><code>ascii-banner --animate sparkle --intensity 0.75 "Shiny"</code></pre></div>
+        <div class="card"><h3>Rainbow palette</h3><pre><code>ascii-banner --animate colorshift --palette rainbow "Party"</code></pre></div>
+        <div class="card"><h3>Fire palette</h3><pre><code>ascii-banner --animate colorshift --palette fire "Heat"</code></pre></div>
+        <div class="card"><h3>Ocean palette</h3><pre><code>ascii-banner --animate waves --palette ocean "Tide"</code></pre></div>
+        <div class="card"><h3>Seeded random</h3><pre><code>ascii-banner --animate random --seed 42 "Stable"</code></pre></div>
+        <div class="card"><h3>Timing control</h3><pre><code>ascii-banner --animate unfurl --fps 18 --duration 2.5 "Slow"</code></pre></div>
+        <div class="card"><h3>Laser line scan</h3><pre><code>ascii-banner -c orange --animate laser --seed 21 "Bitcoin"</code></pre></div>
+      </div>
       <h3>Compatibility rules</h3>
       <div class="table-wrap">
         <table>
@@ -647,20 +1430,30 @@ ascii-banner --animate glitch --intensity 0.2 "Incident"</code></pre>
       <h2 id="media-export">Media Export <a class="anchor" href="#media-export">#</a></h2>
       <p class="muted">Use <code>--export</code> with <code>--animate</code>. The output extension chooses the encoder.</p>
       <pre><code># GIF
-ascii-banner --animate unfurl --export deploy.gif "Deploy"
+ascii-banner --animate unfurl --loop 0 --export deploy.gif "Deploy"
 
 # WebP
-ascii-banner --animate reveal --export deploy.webp "Deploy"
+ascii-banner --animate reveal --loop 0 --export deploy.webp "Deploy"
 
 # MP4 and WebM
-ascii-banner --animate matrix --seed 7 --duration 3 --export banner.mp4 "Launch"
-ascii-banner --animate matrix --seed 7 --duration 3 --export banner.webm "Launch"
+ascii-banner --animate matrix --seed 7 --duration 3 --loop 0 --export banner.mp4 "Launch"
+ascii-banner --animate matrix --seed 7 --duration 3 --loop 0 --export banner.webm "Launch"
 
 # Export several formats in one run
-ascii-banner --animate reveal --export banner.gif --export banner.mp4 --export banner.webm "Launch"
+ascii-banner --animate reveal --loop 0 --export banner.gif --export banner.mp4 --export banner.webm "Launch"
 
 # Control raster cell size and background
-ascii-banner -f Slant -c orange --animate scan --cell-width 8 --cell-height 16 --bg black --export bitcoin-scan.gif "Bitcoin"</code></pre>
+ascii-banner -f Slant -c orange --animate scan --loop 0 --cell-width 8 --cell-height 16 --bg black --export bitcoin-scan.gif "Bitcoin"</code></pre>
+      <div class="cards">
+        <div class="card"><h3>Looping GIF</h3><pre><code>ascii-banner --animate laser --loop 0 --export hero.gif "Launch"</code></pre></div>
+        <div class="card"><h3>Animated WebP</h3><pre><code>ascii-banner --animate waves --loop 0 --export hero.webp "Launch"</code></pre></div>
+        <div class="card"><h3>MP4 video</h3><pre><code>ascii-banner --animate matrix --duration 3 --export hero.mp4 "Launch"</code></pre></div>
+        <div class="card"><h3>WebM video</h3><pre><code>ascii-banner --animate matrix --duration 3 --export hero.webm "Launch"</code></pre></div>
+        <div class="card"><h3>Multiple outputs</h3><pre><code>ascii-banner --animate reveal --export hero.gif --export hero.mp4 "Launch"</code></pre></div>
+        <div class="card"><h3>Pixel cell sizing</h3><pre><code>ascii-banner --animate scan --cell-width 8 --cell-height 16 --export scan.gif "Grid"</code></pre></div>
+        <div class="card"><h3>Custom background</h3><pre><code>ascii-banner -c orange --animate burn --bg "#050200" --export burn.gif "Fire"</code></pre></div>
+        <div class="card"><h3>Custom media font</h3><pre><code>ascii-banner --animate print --media-font ./Mono.ttf --export type.gif "Mono"</code></pre></div>
+      </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Format</th><th>Requires</th><th>Best for</th></tr></thead>
@@ -682,7 +1475,7 @@ ascii-banner -f Slant -c orange --animate scan --cell-width 8 --cell-height 16 -
 pytest</code></pre></div>
         <div class="recipe"><span>Python file banner</span><pre><code>ascii-banner -f Small --comment python "api client" > banner.py</code></pre></div>
         <div class="recipe"><span>README image</span><pre><code>ascii-banner -f "ANSI Shadow" --svg hero.svg --svg-merge "LLM WIKI"</code></pre></div>
-        <div class="recipe"><span>Animated social preview</span><pre><code>ascii-banner -f Slant -c orange --animate matrix --duration 3 --fps 15 --seed 21 --export bitcoin.gif "Bitcoin"</code></pre></div>
+        <div class="recipe"><span>Animated social preview</span><pre><code>ascii-banner -f Slant -c orange --animate matrix --duration 3 --fps 15 --seed 21 --loop 0 --export bitcoin.gif "Bitcoin"</code></pre></div>
         <div class="recipe"><span>Font discovery</span><pre><code>ascii-banner list --preview
 ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
       </div>
@@ -731,7 +1524,53 @@ ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
           </tbody>
         </table>
       </div>
+      <h3>Flag examples</h3>
+      <p class="muted">Each option below has a concrete command. Previewable commands show rendered output; export and local-file commands show what the terminal render looks like before writing files.</p>
+      <div class="cards">
+        <div class="card"><h3>Text argument</h3><pre><code>ascii-banner "Text"</code></pre></div>
+        <div class="card"><h3>Font</h3><pre><code>ascii-banner --font Slant "Font"</code></pre></div>
+        <div class="card"><h3>Font file</h3><pre><code>ascii-banner --font-file /path/to/my-font.flf "Custom"</code></pre></div>
+        <div class="card"><h3>All fonts</h3><pre><code>ascii-banner --all "All"</code></pre></div>
+        <div class="card"><h3>Tag filter</h3><pre><code>ascii-banner --tag tech "AI"</code></pre></div>
+        <div class="card"><h3>Size filter</h3><pre><code>ascii-banner --size sm "Tiny"</code></pre></div>
+        <div class="card"><h3>Sort order</h3><pre><code>ascii-banner --tag block --sort legibility "Sort"</code></pre></div>
+        <div class="card"><h3>Width</h3><pre><code>ascii-banner --width 72 "Width"</code></pre></div>
+        <div class="card"><h3>Color</h3><pre><code>ascii-banner --color orange "Color"</code></pre></div>
+        <div class="card"><h3>Justify</h3><pre><code>ascii-banner --width 72 --justify right "Right"</code></pre></div>
+        <div class="card"><h3>Border</h3><pre><code>ascii-banner --border double "Box"</code></pre></div>
+        <div class="card"><h3>Comment</h3><pre><code>ascii-banner --comment python "module"</code></pre></div>
+        <div class="card"><h3>Quiet</h3><pre><code>ascii-banner --quiet "Hidden"</code></pre></div>
+        <div class="card"><h3>SVG stdout</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - "SVG"</code></pre></div>
+        <div class="card"><h3>SVG default mode</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-mode default "Mode"</code></pre></div>
+        <div class="card"><h3>SVG inset mode</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-mode inset "Mode"</code></pre></div>
+        <div class="card"><h3>SVG extend mode</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-mode extend "Mode"</code></pre></div>
+        <div class="card"><h3>SVG stroke</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-stroke 12 "Line"</code></pre></div>
+        <div class="card"><h3>SVG gap</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-gap 18 "Gap"</code></pre></div>
+        <div class="card"><h3>SVG merge</h3><pre><code>ascii-banner -f "ANSI Shadow" --svg - --svg-merge "Merge"</code></pre></div>
+        <div class="card"><h3>Animate</h3><pre><code>ascii-banner --animate reveal "Motion"</code></pre></div>
+        <div class="card"><h3>Export</h3><pre><code>ascii-banner --animate reveal --export motion.gif "Motion"</code></pre></div>
+        <div class="card"><h3>FPS</h3><pre><code>ascii-banner --animate unfurl --fps 18 "FPS"</code></pre></div>
+        <div class="card"><h3>Duration</h3><pre><code>ascii-banner --animate scan --duration 1.5 "Time"</code></pre></div>
+        <div class="card"><h3>Loop</h3><pre><code>ascii-banner --animate reveal --loop 0 --export loop.gif "Loop"</code></pre></div>
+        <div class="card"><h3>Seed</h3><pre><code>ascii-banner --animate decrypt --seed 42 "Seed"</code></pre></div>
+        <div class="card"><h3>Direction</h3><pre><code>ascii-banner --animate wipe --direction down "Down"</code></pre></div>
+        <div class="card"><h3>Reveal unit</h3><pre><code>ascii-banner --animate print --by line "Line"</code></pre></div>
+        <div class="card"><h3>Axis</h3><pre><code>ascii-banner --animate middleout --axis rows "Rows"</code></pre></div>
+        <div class="card"><h3>Charset</h3><pre><code>ascii-banner --animate matrix --charset hex --seed 21 "Hex"</code></pre></div>
+        <div class="card"><h3>Intensity</h3><pre><code>ascii-banner --animate sparkle --intensity 0.8 "Glow"</code></pre></div>
+        <div class="card"><h3>Palette</h3><pre><code>ascii-banner --animate colorshift --palette fire "Fire"</code></pre></div>
+        <div class="card"><h3>Cell size</h3><pre><code>ascii-banner --animate scan --cell-width 8 --cell-height 16 --export cells.gif "Cells"</code></pre></div>
+        <div class="card"><h3>Media font</h3><pre><code>ascii-banner --animate print --media-font ./Mono.ttf --export type.gif "Mono"</code></pre></div>
+        <div class="card"><h3>Background</h3><pre><code>ascii-banner --color orange --animate burn --bg "#050200" --export bg.gif "BG"</code></pre></div>
+      </div>
       <h3>Subcommands</h3>
+      <div class="cards">
+        <div class="card"><h3>List fonts</h3><pre><code>ascii-banner list</code></pre></div>
+        <div class="card"><h3>List by tag</h3><pre><code>ascii-banner list block</code></pre></div>
+        <div class="card"><h3>List by size</h3><pre><code>ascii-banner list sm</code></pre></div>
+        <div class="card"><h3>List with previews</h3><pre><code>ascii-banner list --preview</code></pre></div>
+        <div class="card"><h3>Show tags</h3><pre><code>ascii-banner tags</code></pre></div>
+      </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Command</th><th>Description</th><th>Examples</th></tr></thead>
@@ -766,8 +1605,12 @@ ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
       </div>
     </section>
 
-  </main>
+    </main>
+  </div>
 
+  <script src="static-examples.js"></script>
+  <script src="fonts.js"></script>
+  <script src="example-previews.js"></script>
   <script>
     const effects = [
       "reveal",
@@ -821,7 +1664,7 @@ ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
 
     function commandFor(example, effect) {
       const output = `docs/assets/${example.slug}-${effect}.gif`;
-      return `ascii-banner -f Slant -c ${example.color} --animate ${effect} --duration 1.6 --fps 8 --seed 21 --intensity 0.35 --cell-width 7 --cell-height 14 --bg black --export ${output} "${example.text}"`;
+      return `ascii-banner -f Slant -c ${example.color} --animate ${effect} --duration 1.6 --fps 8 --seed 21 --intensity 0.35 --loop 0 --cell-width 7 --cell-height 14 --bg black --export ${output} "${example.text}"`;
     }
 
     function cardFor(example, effect) {
@@ -840,12 +1683,311 @@ ascii-banner -t tech --sort legibility "Agent"</code></pre></div>
       return figure;
     }
 
+    function textNode(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) {
+        node.className = className;
+      }
+      node.textContent = text;
+      return node;
+    }
+
+    function commandBlock(command) {
+      const pre = document.createElement("pre");
+      pre.className = "command";
+      const code = document.createElement("code");
+      code.textContent = command;
+      pre.appendChild(code);
+      return pre;
+    }
+
+    function renderStaticExamples() {
+      const grid = document.getElementById("static-grid");
+      if (!grid || !window.ASCII_BANNER_STATIC_EXAMPLES) {
+        return;
+      }
+
+      for (const item of window.ASCII_BANNER_STATIC_EXAMPLES) {
+        const card = document.createElement("article");
+        card.className = "static-card";
+
+        const header = document.createElement("header");
+        const row = document.createElement("div");
+        row.className = "title-row";
+        row.appendChild(textNode("h3", "", item.title));
+        row.appendChild(textNode("span", "chip", item.group));
+        header.appendChild(row);
+        header.appendChild(commandBlock(item.command));
+
+        const output = document.createElement("pre");
+        output.className = `sample-output ${item.className || ""}`.trim();
+        const code = document.createElement("code");
+        code.textContent = item.output;
+        output.appendChild(code);
+
+        card.appendChild(header);
+        card.appendChild(output);
+        grid.appendChild(card);
+      }
+    }
+
+    function renderExamplePreviews() {
+      const previews = window.ASCII_BANNER_EXAMPLE_PREVIEWS || {};
+      for (const card of document.querySelectorAll(".card, .recipe")) {
+        const command = card.querySelector("pre code");
+        if (!command) {
+          continue;
+        }
+        const item = previews[command.textContent.trim()];
+        if (!item || card.querySelector(".example-preview")) {
+          continue;
+        }
+
+        const wrap = document.createElement("div");
+        wrap.className = "example-preview-wrap";
+        wrap.appendChild(textNode("span", "preview-label", item.label || "Preview"));
+
+        const pre = document.createElement("pre");
+        pre.className = `example-preview ${item.className || ""}`.trim();
+        const code = document.createElement("code");
+        code.textContent = item.output;
+        pre.appendChild(code);
+        wrap.appendChild(pre);
+        card.appendChild(wrap);
+      }
+    }
+
+    function renderFontControls(fonts) {
+      const tagSelect = document.getElementById("font-tag");
+      const sizeSelect = document.getElementById("font-size");
+      const legibilitySelect = document.getElementById("font-legibility");
+      const tags = Array.from(new Set(fonts.flatMap((font) => font.tags))).sort();
+      const sizes = ["xs", "sm", "md", "lg", "xl"];
+
+      function fill(select, label, values, formatter = (value) => value) {
+        select.replaceChildren();
+        select.appendChild(new Option(label, ""));
+        for (const value of values) {
+          select.appendChild(new Option(formatter(value), value));
+        }
+      }
+
+      fill(tagSelect, "Any tag", tags);
+      fill(sizeSelect, "Any size", sizes);
+      fill(legibilitySelect, "Any rating", [5, 4, 3, 2, 1], (value) => `${value}/5+`);
+    }
+
+    function fontCard(font) {
+      const card = document.createElement("article");
+      card.className = "font-card";
+
+      const header = document.createElement("header");
+      const row = document.createElement("div");
+      row.className = "title-row";
+      row.appendChild(textNode("h3", "", font.name));
+      row.appendChild(textNode("span", "chip", `${font.size} · ${font.legibility}/5`));
+      header.appendChild(row);
+
+      const meta = document.createElement("div");
+      meta.className = "font-meta";
+      for (const tag of font.tags) {
+        meta.appendChild(textNode("span", "chip", tag));
+      }
+      header.appendChild(meta);
+      header.appendChild(commandBlock(font.command));
+
+      const preview = document.createElement("pre");
+      preview.className = "font-preview";
+      const code = document.createElement("code");
+      code.textContent = font.preview;
+      preview.appendChild(code);
+
+      card.appendChild(header);
+      card.appendChild(preview);
+      return card;
+    }
+
+    function renderFontGallery() {
+      const fonts = window.ASCII_BANNER_FONTS || [];
+      const grid = document.getElementById("font-grid");
+      const count = document.getElementById("font-count");
+      const search = document.getElementById("font-search");
+      const tag = document.getElementById("font-tag");
+      const size = document.getElementById("font-size");
+      const legibility = document.getElementById("font-legibility");
+
+      if (!fonts.length || !grid || !count || !search || !tag || !size || !legibility) {
+        return;
+      }
+
+      renderFontControls(fonts);
+
+      function applyFilters() {
+        const query = search.value.trim().toLowerCase();
+        const tagValue = tag.value;
+        const sizeValue = size.value;
+        const legibilityValue = Number(legibility.value || 0);
+        const filtered = fonts.filter((font) => {
+          const haystack = `${font.name} ${font.size} ${font.tags.join(" ")}`.toLowerCase();
+          return (!query || haystack.includes(query)) &&
+            (!tagValue || font.tags.includes(tagValue)) &&
+            (!sizeValue || font.size === sizeValue) &&
+            (!legibilityValue || font.legibility >= legibilityValue);
+        });
+
+        count.textContent = `${filtered.length} of ${fonts.length} fonts shown`;
+        grid.replaceChildren();
+        for (const font of filtered) {
+          grid.appendChild(fontCard(font));
+        }
+      }
+
+      for (const control of [search, tag, size, legibility]) {
+        control.addEventListener("input", applyFilters);
+      }
+
+      applyFilters();
+    }
+
+    function renderDocSearch() {
+      const input = document.getElementById("doc-search");
+      const results = document.getElementById("doc-search-results");
+      if (!input || !results) {
+        return;
+      }
+
+      const sectionItems = Array.from(document.querySelectorAll("main h2[id], main h3[id]"))
+        .map((node) => ({
+          type: "section",
+          title: node.textContent.replace("#", "").trim(),
+          href: `#${node.id}`,
+          text: node.textContent.toLowerCase()
+        }));
+      const effectItems = effects.map((effect) => ({
+        type: "effect",
+        title: effect,
+        href: "#animation-gallery",
+        text: `${effect} animation gif loop export animate`
+      }));
+      const staticItems = (window.ASCII_BANNER_STATIC_EXAMPLES || []).map((item) => ({
+        type: "static",
+        title: item.title,
+        href: "#static-gallery",
+        text: `${item.group} ${item.title} ${item.command}`.toLowerCase()
+      }));
+      const fontItems = (window.ASCII_BANNER_FONTS || []).map((font) => ({
+        type: "font",
+        title: font.name,
+        href: "#font-gallery",
+        font: font.name,
+        text: `${font.name} ${font.size} ${font.legibility} ${font.tags.join(" ")}`.toLowerCase()
+      }));
+      const index = [...sectionItems, ...effectItems, ...staticItems, ...fontItems];
+
+      function draw() {
+        const query = input.value.trim().toLowerCase();
+        results.replaceChildren();
+        if (!query) {
+          return;
+        }
+        const matches = index
+          .filter((item) => item.text.includes(query) || item.title.toLowerCase().includes(query))
+          .slice(0, 10);
+        for (const item of matches) {
+          const link = document.createElement("a");
+          link.href = item.href;
+          link.innerHTML = `<strong>${item.type}</strong> ${item.title}`;
+          if (item.font) {
+            link.addEventListener("click", () => {
+              const fontSearch = document.getElementById("font-search");
+              if (fontSearch) {
+                fontSearch.value = item.font;
+                fontSearch.dispatchEvent(new Event("input", { bubbles: true }));
+              }
+            });
+          }
+          results.appendChild(link);
+        }
+      }
+
+      input.addEventListener("input", draw);
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          const first = results.querySelector("a");
+          if (first) {
+            event.preventDefault();
+            first.click();
+          }
+        }
+      });
+
+      const initialQuery = new URLSearchParams(window.location.search).get("q");
+      if (initialQuery) {
+        input.value = initialQuery;
+        draw();
+      }
+    }
+
+    function renderScrollSpy() {
+      const links = Array.from(document.querySelectorAll(".nav-menu a[href^='#']"));
+      if (!links.length) {
+        return;
+      }
+
+      const items = links
+        .map((link) => {
+          const id = decodeURIComponent(link.getAttribute("href").slice(1));
+          const target = id === "top" ? document.getElementById("top") : document.getElementById(id);
+          return target ? { link, target } : null;
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
+
+      function setActive(active) {
+        for (const { link } of items) {
+          const selected = link === active;
+          link.classList.toggle("active", selected);
+          if (selected) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        }
+      }
+
+      function update() {
+        const offset = Math.min(160, window.innerHeight * 0.28);
+        let active = items[0];
+        for (const item of items) {
+          if (item.target.getBoundingClientRect().top <= offset) {
+            active = item;
+          } else {
+            break;
+          }
+        }
+        if (active) {
+          setActive(active.link);
+        }
+      }
+
+      update();
+      document.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update);
+      window.addEventListener("hashchange", update);
+    }
+
     for (const example of examples) {
       const grid = document.getElementById(example.grid);
       for (const effect of effects) {
         grid.appendChild(cardFor(example, effect));
       }
     }
+
+    renderStaticExamples();
+    renderFontGallery();
+    renderExamplePreviews();
+    renderDocSearch();
+    renderScrollSpy();
   </script>
 </body>
 </html>

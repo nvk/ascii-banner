@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ascii-banner</title>
+  <meta name="description" content="Generate FIGlet ASCII banners, terminal colors, source-code comments, SVG, and animated web media from one CLI.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #010302;
+      --panel: #050806;
+      --panel-2: #08110b;
+      --line: #2a2f33;
+      --text: #e3ffe9;
+      --muted: #8ca695;
+      --green: #39ff88;
+      --orange: #ff9b2f;
+      --code: #000;
+    }
+
+    * {
+      box-sizing: border-box;
+      border-radius: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(rgba(57, 255, 136, 0.024) 50%, transparent 50%) 0 0 / 100% 4px,
+        var(--bg);
+      color: var(--text);
+      font: 15px/1.48 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    a {
+      color: var(--green);
+    }
+
+    code,
+    pre {
+      background: var(--code);
+      color: #d9ffe4;
+      font: inherit;
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      line-height: 1.35;
+    }
+
+    .site-shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 12px 10px;
+      border-right: 1px solid var(--line);
+      background: #020503;
+      overflow-y: auto;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+    }
+
+    .brand {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .brand::before {
+      content: "$ ";
+      color: var(--muted);
+    }
+
+    .byline {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .byline a,
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .byline a:hover,
+    footer a:hover {
+      color: var(--text);
+    }
+
+    .site-search {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .site-search label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .site-search input {
+      width: 100%;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      background: #000;
+      color: var(--text);
+      font: inherit;
+      padding: 6px 8px;
+    }
+
+    .site-search input::placeholder {
+      color: var(--muted);
+    }
+
+    .nav-menu {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-menu > a,
+    .nav-links a {
+      display: block;
+      padding: 5px 7px;
+      border-left: 2px solid transparent;
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .nav-menu > a::before,
+    .nav-links a::before {
+      content: "> ";
+      color: #2f8f51;
+    }
+
+    .nav-menu > a:hover,
+    .nav-menu > a:focus,
+    .nav-menu > a.active,
+    .nav-links a:hover,
+    .nav-links a:focus,
+    .nav-links a.active {
+      background: #06130a;
+      border-left-color: var(--line);
+      color: var(--text);
+      outline: none;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 3px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-group summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 3px 7px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    .nav-group summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .nav-group summary::before {
+      content: "+ ";
+      color: var(--green);
+    }
+
+    .nav-group[open] summary::before {
+      content: "- ";
+    }
+
+    .nav-links {
+      display: grid;
+      gap: 3px;
+    }
+
+    .nav-links a {
+      padding-left: 16px;
+    }
+
+    main {
+      min-width: 0;
+      padding: 16px 14px 0;
+    }
+
+    .hero {
+      display: grid;
+      gap: 14px;
+      min-height: 74vh;
+      align-content: center;
+      padding: 10px 0 18px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(57, 255, 136, 0.07) 1px, transparent 1px) 0 0 / 34px 100%,
+        linear-gradient(rgba(57, 255, 136, 0.04) 1px, transparent 1px) 0 0 / 100% 28px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .hero-frame {
+      width: min(100%, 1040px);
+      border: 1px solid var(--line);
+      background: #000;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(57, 255, 136, 0.04);
+    }
+
+    .hero-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+    }
+
+    .lede {
+      max-width: 840px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 20px);
+    }
+
+    .hero-command {
+      width: min(100%, 1040px);
+    }
+
+    .hero-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: min(100%, 1040px);
+      border: 1px solid var(--line);
+      background: #020503;
+    }
+
+    .hero-links a {
+      padding: 10px 12px;
+      border-right: 1px solid var(--line);
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .hero-links a:last-child {
+      border-right: 0;
+    }
+
+    .hero-links a::before {
+      content: "> ";
+      color: var(--muted);
+    }
+
+    .hero-links a:hover,
+    .hero-links a:focus {
+      background: #07110a;
+      color: var(--text);
+      outline: none;
+    }
+
+    .section {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-inner {
+      max-width: 1320px;
+      display: grid;
+      gap: 14px;
+    }
+
+    h2 {
+      color: var(--green);
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    h2::before {
+      content: "## ";
+      color: var(--muted);
+    }
+
+    h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    h2 a::after {
+      content: " ->";
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    h2 a:hover,
+    h2 a:focus {
+      color: var(--text);
+      outline: none;
+    }
+
+    .terminal-grid,
+    .feature-grid,
+    .media-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .terminal-grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .media-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .pane,
+    .feature,
+    .media {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      min-width: 0;
+    }
+
+    .pane-title {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      background: #020503;
+    }
+
+    .pane-title::before {
+      content: "> ";
+      color: var(--green);
+    }
+
+    .pane-body,
+    .feature {
+      padding: 8px;
+    }
+
+    .feature h3 {
+      color: var(--text);
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .feature h3::before {
+      content: "[";
+      color: var(--muted);
+    }
+
+    .feature h3::after {
+      content: "]";
+      color: var(--muted);
+    }
+
+    .feature h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .feature h3 a:hover,
+    .feature h3 a:focus {
+      color: var(--green);
+      outline: none;
+    }
+
+    .feature p,
+    .media p {
+      color: var(--muted);
+    }
+
+    .media img {
+      display: block;
+      width: 100%;
+      min-height: 80px;
+      background: #000;
+      border-bottom: 1px solid var(--line);
+      image-rendering: pixelated;
+    }
+
+    .media p {
+      padding: 8px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .button {
+      display: inline-block;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 8px 10px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .button.primary {
+      color: #001f0d;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    footer {
+      padding: 18px 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .site-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      main {
+        padding: 12px 10px 0;
+      }
+
+      .hero {
+        min-height: 0;
+        padding-top: 12px;
+      }
+
+      .terminal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        font-size: 14px;
+      }
+
+      .nav-menu,
+      .hero-links,
+      .media-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-links a {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-links a:last-child {
+        border-bottom: 0;
+      }
+
+      .lede {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="side-nav" aria-label="Site navigation">
+      <div class="brand-lockup">
+        <a class="brand" href="/">ascii-banner</a>
+        <span class="byline">by <a href="https://github.com/nvk">nvk</a></span>
+      </div>
+      <form class="site-search" id="site-search" role="search">
+        <label for="site-search-input">Search</label>
+        <input id="site-search-input" name="q" type="search" placeholder="fonts, flags, effects">
+      </form>
+      <nav class="nav-menu">
+        <a class="active" href="/" aria-current="page">Home</a>
+        <details class="nav-group" open>
+          <summary>Guide</summary>
+          <div class="nav-links">
+            <a href="/docs/">Full guide</a>
+            <a href="/docs/#top">Guide top</a>
+            <a href="/docs/#install">Install</a>
+            <a href="/docs/#quick-start">Quick start</a>
+            <a href="/docs/#input">Input</a>
+            <a href="/docs/#fonts">Fonts</a>
+            <a href="/docs/#color">Color</a>
+            <a href="/docs/#layout">Layout</a>
+            <a href="/docs/#borders">Borders</a>
+            <a href="/docs/#comments">Comments</a>
+            <a href="/docs/#svg">SVG</a>
+            <a href="/docs/#animations">Animations</a>
+            <a href="/docs/#media-export">Media export</a>
+          </div>
+        </details>
+        <details class="nav-group" open>
+          <summary>Galleries</summary>
+          <div class="nav-links">
+            <a href="/docs/#animation-gallery">Animation gallery</a>
+            <a href="/docs/#static-gallery">Static examples</a>
+            <a href="/docs/#font-gallery">All fonts</a>
+          </div>
+        </details>
+        <details class="nav-group" open>
+          <summary>Reference</summary>
+          <div class="nav-links">
+            <a href="/docs/#recipes">Recipes</a>
+            <a href="/docs/#flag-reference">Flags</a>
+            <a href="/docs/#troubleshooting">Troubleshooting</a>
+            <a href="https://github.com/nvk/ascii-banner">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </aside>
+
+    <main id="home">
+      <section class="hero">
+        <p class="eyebrow">FIGlet banners for terminals, docs, comments, SVG, and web media</p>
+        <h1 class="sr-only">ascii-banner</h1>
+        <div class="hero-frame">
+          <img src="docs/assets/ascii-banner-laser.gif" alt="ascii-banner laser animation generated by ascii-banner">
+        </div>
+        <p class="lede">Generate readable terminal banners with 328 bundled fonts, ANSI colors, borders, source-code comments, vector SVG, and canned ASCII animations that export to GIF, WebP, MP4, and WebM.</p>
+        <pre class="hero-command"><code>ascii-banner -f Slant -c green --animate laser --duration 1.8 --fps 12 --seed 21 --loop 0 --export ascii-banner-laser.gif "ascii-banner"</code></pre>
+        <nav class="hero-links" aria-label="Primary sections">
+          <a href="/docs/">docs</a>
+          <a href="/docs/#animation-gallery">animations</a>
+          <a href="/docs/#font-gallery">fonts</a>
+        </nav>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <h2><a href="/docs/#quick-start">Start Here</a></h2>
+          <div class="terminal-grid">
+            <div class="pane">
+              <div class="pane-title">install and render</div>
+              <div class="pane-body">
+                <pre><code>brew install nvk/tap/ascii-banner
+
+ascii-banner -f Slant -c green --border rounded "Deploy"
+
+pip install "ascii-banner[media]"
+ascii-banner --animate matrix --seed 21 --loop 0 --export launch.gif "Launch"</code></pre>
+              </div>
+            </div>
+            <div class="pane">
+              <div class="pane-title">output</div>
+              <div class="pane-body">
+                <pre><code>    ____             __
+   / __ \___  ____  / /___  __  __
+  / / / / _ \/ __ \/ / __ \/ / / /
+ / /_/ /  __/ /_/ / / /_/ / /_/ /
+/_____/\___/ .___/_/\____/\__, /
+          /_/             /____/</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <h2><a href="/docs/#contents">What It Does</a></h2>
+          <div class="feature-grid">
+            <div class="feature"><h3><a href="/docs/#font-gallery">328 fonts</a></h3><p>Browse by tag, size, and legibility; fuzzy matching handles common typos.</p></div>
+            <div class="feature"><h3><a href="/docs/#color">Terminal styling</a></h3><p>Named colors, hex colors, rainbow, gradients, borders, width, and justification.</p></div>
+            <div class="feature"><h3><a href="/docs/#comments">Source comments</a></h3><p>Wrap banners for Python, JS, C, CSS, HTML, SQL, shell, Rust, Go, and more.</p></div>
+            <div class="feature"><h3><a href="/docs/#media-export">SVG and media</a></h3><p>Export vector SVG or animated GIF, WebP, MP4, and WebM assets for the web.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <h2><a href="/docs/#media-export">Generated Media</a></h2>
+          <div class="media-grid">
+            <div class="media">
+              <img src="docs/assets/llm-wiki-synthgrid.gif" alt="LLM-WIKI synthgrid animation">
+              <p><code>ascii-banner -f Slant -c green --animate synthgrid --loop 0 --export llm-wiki-synthgrid.gif "LLM-WIKI"</code></p>
+            </div>
+            <div class="media">
+              <img src="docs/assets/bitcoin-laser.gif" alt="Bitcoin laser animation">
+              <p><code>ascii-banner -f Slant -c orange --animate laser --loop 0 --export bitcoin-laser.gif "Bitcoin"</code></p>
+            </div>
+            <div class="media">
+              <img src="docs/assets/llm-wiki-glitch.gif" alt="LLM-WIKI glitch animation">
+              <p><code>ascii-banner -f Slant -c green --animate glitch --intensity 0.35 --loop 0 --export llm-wiki-glitch.gif "LLM-WIKI"</code></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <h2><a href="/docs/#contents">Full Guide</a></h2>
+          <p class="lede">The guide covers every flag, all animation effects, static examples, every bundled font, export formats, recipes, and troubleshooting.</p>
+          <div class="actions">
+            <a class="button primary" href="/docs/">Open the full guide</a>
+            <a class="button" href="https://github.com/nvk/ascii-banner">Source repo</a>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        ascii-banner.com · by <a href="https://github.com/nvk">nvk</a> · MIT licensed · built for terminal output that can leave the terminal
+      </footer>
+    </main>
+  </div>
+  <script>
+    document.getElementById("site-search").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const query = new FormData(event.currentTarget).get("q").trim();
+      if (query) {
+        window.location.href = `/docs/?q=${encodeURIComponent(query)}`;
+      }
+    });
+  </script>
+</body>
+</html>
