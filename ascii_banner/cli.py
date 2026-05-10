@@ -9,7 +9,7 @@ import os
 import sys
 
 from . import color as colormod
-from . import parser, renderer
+from . import parser, renderer, svg as svgmod
 from .border import wrap as border_wrap, list_styles as border_styles
 from .categories import (
     CATEGORIES,
@@ -89,6 +89,10 @@ def main() -> None:
         font_names = font_names or parser.list_fonts()
 
     if font_names is not None:
+        if args.svg is not None:
+            print("--svg is incompatible with multi-font mode (-a/-t/-s)",
+                  file=sys.stderr)
+            sys.exit(2)
         font_names = sort_fonts(font_names, args.sort)
         _render_multiple(font_names, text, width, args)
         return
@@ -100,8 +104,42 @@ def main() -> None:
         font = _load_font_fuzzy(args.font)
 
     output = _render_text(font, text, width, args.justify)
+
+    if args.svg is not None:
+        _emit_svg(output, args)
+        return
+
     output = _apply_postprocess(output, args)
     print(output)
+
+
+def _emit_svg(banner: str, args: argparse.Namespace) -> None:
+    """Render the banner as vector SVG and write to file or stdout."""
+    for incompatible in ("color", "border", "comment"):
+        if getattr(args, incompatible):
+            print(f"warning: --{incompatible} ignored when --svg is set",
+                  file=sys.stderr)
+    try:
+        doc = svgmod.to_svg(
+            banner,
+            mode=args.svg_mode,
+            stroke=args.svg_stroke,
+            gap=args.svg_gap,
+            merge=args.svg_merge,
+        )
+    except svgmod.UnsupportedGlyphError as e:
+        print(f"error: {e}", file=sys.stderr)
+        print("hint: SVG output currently supports figlet fonts that use only "
+              "block + double-line box-drawing glyphs (e.g. ANSI Shadow).",
+              file=sys.stderr)
+        sys.exit(1)
+
+    if args.svg == "-":
+        sys.stdout.write(doc + "\n")
+    else:
+        with open(args.svg, "w", encoding="utf-8") as f:
+            f.write(doc + "\n")
+        print(f"wrote {args.svg}", file=sys.stderr)
 
 
 def _load_font_fuzzy(name: str) -> parser.Font:
@@ -295,6 +333,19 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--comment",
                     help="format as code comment (python, js, c, bash, html, ...)")
     ap.add_argument("-q", "--quiet", action="store_true", help="suppress output")
+
+    ap.add_argument("--svg", nargs="?", const="-", default=None, metavar="PATH",
+                    help="emit vector SVG instead of terminal output "
+                         "(no value = stdout)")
+    ap.add_argument("--svg-mode", choices=["default", "inset", "extend"],
+                    default="extend",
+                    help="SVG block rendering mode (default: extend)")
+    ap.add_argument("--svg-stroke", type=float, default=15,
+                    help="SVG: thickness of each line in a double-line glyph")
+    ap.add_argument("--svg-gap", type=float, default=20,
+                    help="SVG: gap between the two parallel lines of a double")
+    ap.add_argument("--svg-merge", action="store_true",
+                    help="SVG: merge adjacency-aligned rects (smaller file)")
 
     return ap.parse_args()
 

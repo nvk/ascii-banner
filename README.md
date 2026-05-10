@@ -248,6 +248,33 @@ Font 'blok' not found. Using 'Block'.
 
 Fuzzy matching uses substring search, character sequence matching, and Levenshtein edit distance to find the best result.
 
+## SVG Output
+
+Emit a banner as pure-vector SVG (rectangles only — no font dependency,
+no rasterization). Useful for stickers, vinyl plotters, laser cutters,
+or any time you want a resolution-independent version of the banner.
+
+```bash
+# Write SVG to file
+ascii-banner -f "ANSI Shadow" --svg out.svg "LLM WIKI"
+
+# Write SVG to stdout (pass --svg with no value)
+ascii-banner -f "ANSI Shadow" --svg "LLM WIKI" > out.svg
+```
+
+`--svg-mode` controls how the █ block aligns with the shadow band:
+
+- `extend` (default) — front face stays solid, shadow attaches as a continuous outline. Best for cutter use.
+- `default` — authentic figlet ANSI-Shadow look with a visible offset between front face and shadow.
+- `inset` — fragmented 8-bit / pixel-glitch aesthetic.
+
+`--svg-merge` collapses adjacent axis-aligned rects (e.g. `═══════` →
+one wide rect), shrinking the file ~60% with byte-identical render.
+
+SVG output currently supports figlet fonts that use only block +
+double-line box-drawing glyphs (ANSI Shadow and similar). Other fonts
+fail loudly with the offending codepoint.
+
 ## Suppress Output
 
 ```bash
