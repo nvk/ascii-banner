@@ -1,0 +1,38 @@
+# ascii-banner
+
+> Generate FIGlet ASCII banners, terminal colors, source-code comments, SVG output, and animated GIF/WebP/MP4/WebM media from one CLI.
+
+Website: https://ascii-banner.com/
+Repository: https://github.com/nvk/ascii-banner
+Package: https://pypi.org/project/ascii-banner/
+Homebrew: https://github.com/nvk/homebrew-tap/blob/main/Formula/ascii-banner.rb
+
+## Documentation
+
+- Home: https://ascii-banner.com/
+  Overview, install snippets, hero animation, and generated media examples.
+- Full guide: https://ascii-banner.com/docs/
+  Comprehensive guide to input, fonts, colors, layout, borders, comments, SVG output, animations, media export, recipes, and flags.
+- Animation gallery: https://ascii-banner.com/docs/#animation-gallery
+  Every supported animation as generated GIF examples for LLM-WIKI and Bitcoin.
+- Static examples: https://ascii-banner.com/docs/#static-gallery
+  Terminal output examples for fonts, colors, borders, layout, and comments.
+- Font gallery: https://ascii-banner.com/docs/#font-gallery
+  All bundled FIGlet fonts with tags, size, legibility, preview, and command.
+- Flag reference: https://ascii-banner.com/docs/#flag-reference
+  CLI options, subcommands, environment behavior, and previewable command cards.
+- Troubleshooting: https://ascii-banner.com/docs/#troubleshooting
+  Common terminal color, media export, SVG, and randomized animation issues.
+
+## Install
+
+Homebrew: `brew install nvk/tap/ascii-banner`
+
+pip: `pip install ascii-banner`
+
+Media extras: `pip install "ascii-banner[media]"`
+
+## Related
+
+- LLM Wiki: https://llm-wiki.net
+- Learn to Prompt: https://learntoprompt.org
