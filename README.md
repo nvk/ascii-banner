@@ -4,7 +4,7 @@
 
 Convert text to ASCII art banners using FIGlet fonts. 328 built-in fonts, color output, borders, comment formatting, and fuzzy font search -- all with zero dependencies.
 
-**Website**: [ascii-banner.com](https://ascii-banner.com) | **Docs & examples**: [ascii-banner.com/docs](https://ascii-banner.com/docs/) | **Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner)
+**Website**: [ascii-banner.com](https://ascii-banner.com) | **Docs & examples**: [ascii-banner.com/docs](https://ascii-banner.com/docs/) | **Repository**: [github.com/nvk/ascii-banner](https://github.com/nvk/ascii-banner) | **Web renderer**: [ansisheet.com](https://ansisheet.com) | **History**: [asciihistory.com](https://asciihistory.com)
 
 ## Install
 
@@ -378,6 +378,9 @@ Useful for conditionally disabling banners in scripts or CI.
 ## History
 
 Curious about the origins of ASCII art? Check out [asciihistory.com](https://asciihistory.com).
+Need responsive web display for generated banners? Render ascii-banner output
+with [ansisheet](https://ansisheet.com) and browse live examples at
+[ansisheet.com/examples](https://ansisheet.com/examples/).
 
 ## License
 
